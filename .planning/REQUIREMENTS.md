@@ -9,9 +9,9 @@ Sprint Days 2–5 plus final case study. Each maps to a roadmap phase.
 
 ### Day 2 — Sketch
 
-- [ ] **SKTCH-01**: Lightning demos completed for 4+ competitor/analogous products (must include at least one collaborative tool, not just single-user home decor apps)
-- [ ] **SKTCH-02**: Lightning demo notes document each product's relevant mechanism (what they do, what they're missing, what's worth borrowing)
-- [ ] **SKTCH-03**: Most critical screen identified and documented with rationale (style selector or A/B kit comparison — research indicates either is valid; one must be committed)
+- [x] **SKTCH-01**: Lightning demos completed for 4+ competitor/analogous products (must include at least one collaborative tool, not just single-user home decor apps)
+- [x] **SKTCH-02**: Lightning demo notes document each product's relevant mechanism (what they do, what they're missing, what's worth borrowing)
+- [x] **SKTCH-03**: Most critical screen identified and documented with rationale (style selector or A/B kit comparison — research indicates either is valid; one must be committed)
 - [ ] **SKTCH-04**: Crazy 8s completed for the critical screen — 8 distinct interaction models in 8 minutes, not layout variations of the same idea
 - [ ] **SKTCH-05**: Second Crazy 8s round completed for at least one additional critical screen (style selector if Crazy 8s was kit comparison, or vice versa)
 - [ ] **SKTCH-06**: Solution sketch produced — 3-panel board telling a before/during/after user story for the primary critical screen, with annotation explaining design decisions
@@ -92,9 +92,9 @@ Deferred — not in current roadmap. Relevant for future iterations or portfolio
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SKTCH-01 | Phase 1 — Day 2: Sketch | Pending |
-| SKTCH-02 | Phase 1 — Day 2: Sketch | Pending |
-| SKTCH-03 | Phase 1 — Day 2: Sketch | Pending |
+| SKTCH-01 | Phase 1 — Day 2: Sketch | Complete |
+| SKTCH-02 | Phase 1 — Day 2: Sketch | Complete |
+| SKTCH-03 | Phase 1 — Day 2: Sketch | Complete |
 | SKTCH-04 | Phase 1 — Day 2: Sketch | Pending |
 | SKTCH-05 | Phase 1 — Day 2: Sketch | Pending |
 | SKTCH-06 | Phase 1 — Day 2: Sketch | Pending |

@@ -38,7 +38,12 @@ Day 1 is complete. This roadmap covers the five remaining phases of the sprint: 
 - Echo chamber: Crazy 8s panels become layout variations instead of interaction model variations — prevention: use HMW notes from Day 1 as prompts, not blank paper
 - Skipping the second Crazy 8s round to save time leaves SKTCH-05 unmet and the secondary screen underexplored
 
-**Plans**: TBD
+**Plans:** 1/3 plans executed
+
+Plans:
+- [x] 01-01-PLAN.md — Prep, lightning demos (10 products), and critical screen decision
+- [ ] 01-02-PLAN.md — Crazy 8s Round 1 (A/B kit comparison) and Round 2 (style selector)
+- [ ] 01-03-PLAN.md — Solution sketch (3-panel) and final Day 2 documentation
 
 ---
 
@@ -131,7 +136,7 @@ Day 1 is complete. This roadmap covers the five remaining phases of the sprint: 
 ---
 
 ### Phase 5: Case Study
-**Goal**: A submitted case study demonstrates the full sprint process using a Problem → Bet → Evidence → Decision → Learning narrative, explicitly addresses the expanded scope decision, and meets Springboard assignment requirements
+**Goal**: A submitted case study demonstrates the full sprint process using a Problem -> Bet -> Evidence -> Decision -> Learning narrative, explicitly addresses the expanded scope decision, and meets Springboard assignment requirements
 **Depends on**: Phase 4
 **Requirements**: CASE-01, CASE-02, CASE-03, CASE-04, CASE-05, CASE-06, CASE-07
 **Effort**: Moderate
@@ -207,7 +212,7 @@ Day 1 is complete. This roadmap covers the five remaining phases of the sprint: 
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Day 2 — Sketch | 0/TBD | Not started | - |
+| 1. Day 2 — Sketch | 1/3 | In Progress|  |
 | 2. Day 3 — Storyboard | 0/TBD | Not started | - |
 | 3. Day 4 — Prototype | 0/TBD | Not started | - |
 | 4. Day 5 — Test & Validate | 0/TBD | Not started | - |
