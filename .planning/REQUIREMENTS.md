@@ -12,8 +12,8 @@ Sprint Days 2–5 plus final case study. Each maps to a roadmap phase.
 - [x] **SKTCH-01**: Lightning demos completed for 4+ competitor/analogous products (must include at least one collaborative tool, not just single-user home decor apps)
 - [x] **SKTCH-02**: Lightning demo notes document each product's relevant mechanism (what they do, what they're missing, what's worth borrowing)
 - [x] **SKTCH-03**: Most critical screen identified and documented with rationale (style selector or A/B kit comparison — research indicates either is valid; one must be committed)
-- [ ] **SKTCH-04**: Crazy 8s completed for the critical screen — 8 distinct interaction models in 8 minutes, not layout variations of the same idea
-- [ ] **SKTCH-05**: Second Crazy 8s round completed for at least one additional critical screen (style selector if Crazy 8s was kit comparison, or vice versa)
+- [x] **SKTCH-04**: Crazy 8s completed for the critical screen — 8 distinct interaction models in 8 minutes, not layout variations of the same idea
+- [x] **SKTCH-05**: Second Crazy 8s round completed for at least one additional critical screen (style selector if Crazy 8s was kit comparison, or vice versa)
 - [ ] **SKTCH-06**: Solution sketch produced — 3-panel board telling a before/during/after user story for the primary critical screen, with annotation explaining design decisions
 - [ ] **SKTCH-07**: Day 2 work documented in sprint doc (screenshots of Crazy 8s, written reflection on lightning demos and solution sketch choices)
 
@@ -95,8 +95,8 @@ Deferred — not in current roadmap. Relevant for future iterations or portfolio
 | SKTCH-01 | Phase 1 — Day 2: Sketch | Complete |
 | SKTCH-02 | Phase 1 — Day 2: Sketch | Complete |
 | SKTCH-03 | Phase 1 — Day 2: Sketch | Complete |
-| SKTCH-04 | Phase 1 — Day 2: Sketch | Pending |
-| SKTCH-05 | Phase 1 — Day 2: Sketch | Pending |
+| SKTCH-04 | Phase 1 — Day 2: Sketch | Complete |
+| SKTCH-05 | Phase 1 — Day 2: Sketch | Complete |
 | SKTCH-06 | Phase 1 — Day 2: Sketch | Pending |
 | SKTCH-07 | Phase 1 — Day 2: Sketch | Pending |
 | STRY-01 | Phase 2 — Day 3: Storyboard | Pending |

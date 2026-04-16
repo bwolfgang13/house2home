@@ -38,11 +38,11 @@ Day 1 is complete. This roadmap covers the five remaining phases of the sprint: 
 - Echo chamber: Crazy 8s panels become layout variations instead of interaction model variations — prevention: use HMW notes from Day 1 as prompts, not blank paper
 - Skipping the second Crazy 8s round to save time leaves SKTCH-05 unmet and the secondary screen underexplored
 
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 Plans:
 - [x] 01-01-PLAN.md — Prep, lightning demos (10 products), and critical screen decision
-- [ ] 01-02-PLAN.md — Crazy 8s Round 1 (A/B kit comparison) and Round 2 (style selector)
+- [x] 01-02-PLAN.md — Crazy 8s Round 1 (A/B kit comparison) and Round 2 (style selector)
 - [ ] 01-03-PLAN.md — Solution sketch (3-panel) and final Day 2 documentation
 
 ---
@@ -167,8 +167,8 @@ Plans:
 | SKTCH-01 | Phase 1 | Pending |
 | SKTCH-02 | Phase 1 | Pending |
 | SKTCH-03 | Phase 1 | Pending |
-| SKTCH-04 | Phase 1 | Pending |
-| SKTCH-05 | Phase 1 | Pending |
+| SKTCH-04 | Phase 1 | Complete |
+| SKTCH-05 | Phase 1 | Complete |
 | SKTCH-06 | Phase 1 | Pending |
 | SKTCH-07 | Phase 1 | Pending |
 | STRY-01 | Phase 2 | Pending |
@@ -212,7 +212,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Day 2 — Sketch | 1/3 | In Progress|  |
+| 1. Day 2 — Sketch | 2/3 | In Progress|  |
 | 2. Day 3 — Storyboard | 0/TBD | Not started | - |
 | 3. Day 4 — Prototype | 0/TBD | Not started | - |
 | 4. Day 5 — Test & Validate | 0/TBD | Not started | - |
