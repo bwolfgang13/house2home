@@ -8,7 +8,7 @@ Day 1 is complete. This roadmap covers the five remaining phases of the sprint: 
 
 ## Phases
 
-- [ ] **Phase 1: Day 2 — Sketch** - Lightning demos, Crazy 8s, and solution sketch commit the sprint to one direction
+- [x] **Phase 1: Day 2 — Sketch** - Lightning demos, Crazy 8s, and solution sketch commit the sprint to one direction
 - [ ] **Phase 2: Day 3 — Storyboard** - Scope locked, storyboard built, wireframes created, participants confirmed
 - [ ] **Phase 3: Day 4 — Prototype** - Figma prototype built from storyboard, shareable and testable
 - [ ] **Phase 4: Day 5 — Test & Validate** - 5 Five-Act Interviews conducted, findings synthesized
@@ -38,12 +38,12 @@ Day 1 is complete. This roadmap covers the five remaining phases of the sprint: 
 - Echo chamber: Crazy 8s panels become layout variations instead of interaction model variations — prevention: use HMW notes from Day 1 as prompts, not blank paper
 - Skipping the second Crazy 8s round to save time leaves SKTCH-05 unmet and the secondary screen underexplored
 
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans executed
 
 Plans:
 - [x] 01-01-PLAN.md — Prep, lightning demos (10 products), and critical screen decision
 - [x] 01-02-PLAN.md — Crazy 8s Round 1 (A/B kit comparison) and Round 2 (style selector)
-- [ ] 01-03-PLAN.md — Solution sketch (3-panel) and final Day 2 documentation
+- [x] 01-03-PLAN.md — Solution sketch (3-panel) and storyboard (11 Solo Mover + 6 Pro screens)
 
 ---
 
@@ -164,13 +164,13 @@ Plans:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SKTCH-01 | Phase 1 | Pending |
-| SKTCH-02 | Phase 1 | Pending |
-| SKTCH-03 | Phase 1 | Pending |
+| SKTCH-01 | Phase 1 | Complete |
+| SKTCH-02 | Phase 1 | Complete |
+| SKTCH-03 | Phase 1 | Complete |
 | SKTCH-04 | Phase 1 | Complete |
 | SKTCH-05 | Phase 1 | Complete |
-| SKTCH-06 | Phase 1 | Pending |
-| SKTCH-07 | Phase 1 | Pending |
+| SKTCH-06 | Phase 1 | Complete |
+| SKTCH-07 | Phase 1 | Complete |
 | STRY-01 | Phase 2 | Pending |
 | STRY-02 | Phase 2 | Pending |
 | STRY-03 | Phase 2 | Pending |
@@ -212,7 +212,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Day 2 — Sketch | 2/3 | In Progress|  |
+| 1. Day 2 — Sketch | 3/3 | Complete | 2026-04-01 |
 | 2. Day 3 — Storyboard | 0/TBD | Not started | - |
 | 3. Day 4 — Prototype | 0/TBD | Not started | - |
 | 4. Day 5 — Test & Validate | 0/TBD | Not started | - |
