@@ -73,6 +73,54 @@ Day 1 defined the core problem (users lack confidence decorating independently),
 **Strongest borrowable mechanism:** Havenly's binary thumbs + rejection micro-feedback. It's the only pattern that captures *directional* preference signals (not just approval/rejection) with near-zero friction, and those signals can directly drive the next comparison round's content. Applied to House2Home: track not just which kit wins each round, but *why* the other lost — use that signal to weight the next round's matchup.
 **Gap no product solves:** None of the 10 products presents two complete, styled kit options side-by-side in context and lets the user make a single binary choice that progresses the experience. Every tool either shows items in isolation, enables open-ended browsing, or requires the user to manually configure comparisons. House2Home's forced A/B × 3 structure is genuinely novel in this space.
 
+## Crazy 8s -- Round 1: A/B Kit Comparison
+**Question:** How do we reduce choice paralysis?
+**HMW prompts used:**
+1. HMW make each comparison feel like the final one?
+2. HMW make the user feel like an expert during the comparison?
+3. HMW let the kits explain themselves rather than requiring a read?
+4. HMW make "not choosing" feel like progress, not failure?
+5. HMW create a sense of momentum through the 3-round structure?
+6. HMW show the user what they're moving toward, not just away from?
+7. HMW make the chosen kit feel inevitable in retrospect?
+8. HMW reduce the fear of choosing wrong?
+
+*[Physical artifact: paper sketch — 8 panels, photographed in Day 3 PDF]*
+
+**Panels sketched (from artifact):**
+1. Style Finder entry — "Find Your Style and decorate your home" with Find+ button and kit preview below
+2. Style Finder word/emoji selector — "words that describe your style, select 5–8" with emoji grid
+3. Style Finder AI branch — "Tell me what I'm missing" / "Generate AI" option
+4. Style confirmed — "Your Style: Modern" with kit thumbnail and CTA
+5. **A/B Kit Comparison — "1 or 2 — Pick Your Starter Pack"** *(selected as primary direction)*
+6. Numbered comparison variant — "9 or 3" with "most" / "3×" labels
+7. Kit detail — "Modern... Pack" with items list, price ~$53, Add to Cart / Add Items CTAs
+8. AR test entry — "Test Your Starter Pack IN the Home" with Upload App / Take Photo options
+
+**Reflection:**
+- **Panels that stood out:** Panel 5 ("1 or 2 — Pick Your Starter Pack") — binary forced choice with no distraction, already style-matched kits pre-loaded so the user only decides between two curated options. Panel 8 (AR test entry) — separates visualization from commitment cleanly.
+- **Panels that were layout variations:** Panels 1 and 4 were effectively the same screen at different states rather than distinct interaction models.
+- **Interaction model selected:** Binary forced-choice comparison with style-pre-matched kits — "1 or 2" with no third option, no back-out, no browsing. Each round eliminates one option and advances the user toward a single kit.
+
+## Crazy 8s -- Round 2: Style Selector
+**Question:** How do we help users identify and commit to a style without overwhelming them?
+
+*[Physical artifact: paper sketch — 8 panels, photographed in Day 3 PDF. Panels explored across the same session as Round 1.]*
+
+**Panels sketched (from artifact):**
+1. Word/emoji multi-select — tap 5–8 descriptors from a grid to seed style profile
+2. AI generation branch — "Tell me what I'm missing" prompt with AI-generated style suggestions
+3. "Your Style: Modern" confirmation screen — style label displayed with kit thumbnails as proof
+4. Numbered kit comparison variant — shows multiple options simultaneously with count/price indicators
+5. Kit detail with customization — individual item list with swap affordance, total price, add to cart
+6. AR test-in-home entry — Upload App / Take Photo two-path entry
+7. AR/Generate AI full-screen — immersive visualization of placed items/packs
+8. *(Panel left blank / exploratory)*
+
+**Reflection:**
+- **Panels that stood out:** The word/emoji multi-select (low cognitive load, implicit style signal) and the AI generation branch (removes the burden of self-knowledge from the user).
+- **Interaction model selected:** Two-branch entry into style — users who know their style self-select a label; users who don't use the emoji/word grid or AI generation. Both paths converge on a style confirmation screen before entering kit comparison.
+
 ## Critical Screen Decision
 **Primary critical screen:** A/B Kit Comparison
 **Rationale:** Every lightning demo confirmed that the breakdown point across competitive products is the same: users can discover and visualize, but they stall when forced to commit. The A/B Kit Comparison screen is the moment House2Home either solves this or reproduces it. If the comparison doesn't communicate trade-offs clearly, give the user a decisive signal, and make commitment feel low-risk, the entire upstream UX (style finder, kit curation) loses its value. No competitor has solved this screen — which means getting it right is the primary design bet of the sprint.
