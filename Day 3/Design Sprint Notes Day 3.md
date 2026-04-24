@@ -65,6 +65,24 @@ Confirmation screen. Order summary (items, total), delivery date, visual of chos
 ### Screen 11: Email Confirmation
 Email view — "Summary: Starter Pack" — order recap with item list. Entry point back into app if user wants to track or reorder.
 
+## Storyboard Panel Summary
+
+| Panel | Screen Name | Decision Moment / Emotional Beat | Annotation | Prototype-Required |
+|-------|-------------|----------------------------------|------------|-------------------|
+| 1 | Style Finder Entry | Entry commitment — user decides to engage | Single CTA anchors expectation; kit previews below reduce uncertainty | Yes |
+| 2 | Style Selector | Self-expression — user externalizes taste | Word/emoji multi-select seeds style profile without requiring design vocabulary | Yes |
+| 3 | Style Confirmed | Validation — user sees their style named | Style label + kit thumbnails prove the system understood them; builds trust before comparison | Yes |
+| 4 | A/B Kit Comparison R1 | **HIGHEST-RISK MOMENT** — forced binary choice with no escape | Abandonment risk: user forced to pick 1-of-2 with no back-out, no browse, no third option. Mitigation: cost/item count/thumbnails provide just enough info for a gut decision without analysis paralysis | Yes |
+| 5 | A/B Kit Comparison R2 | Momentum — repeat pattern reduces friction | Same structure as R1; predictability lowers cognitive load by round 2 | Yes |
+| 6 | A/B Kit Comparison R3 | Resolution — one winner emerges | Final elimination round; user sees the pattern complete | Yes |
+| 7 | Chosen Kit Detail | Ownership — user examines what they chose | Full kit display with item list, total cost; customization available but not required | Yes |
+| 8 | Add-Ons | Optional expansion — user can enhance without pressure | Upsell positioned as optional; checkboxes keep it low-commitment | Yes |
+| 9 | Order Summary | Commitment — financial decision point | Standard checkout flow; delivery estimate and payment entry | Yes |
+| 10 | Order Confirmation | Completion — purchase confidence achieved | Order recap with delivery date; share/save CTA extends the moment | Yes |
+| 11 | Email Confirmation | Post-purchase reassurance | Order recap via email; re-entry point to app | No (low priority) |
+
+Screens 1–10 map 1:1 to Figma prototype frames for Day 4. Screen 11 (Email Confirmation) is documented but not required for the tested prototype.
+
 ## Storyboard — Professional Flow (Desktop)
 
 *Physical artifact: paper sketch, page 3 of Design Sprint-notes day 3 new.pdf*
