@@ -50,7 +50,7 @@ Plans:
 ### Phase 2: Day 3 — Storyboard
 **Goal**: A complete storyboard covers every screen required for the Day 4 prototype, scope is locked to Solo Mover desktop as the spine, participants for Day 5 are confirmed
 **Depends on**: Phase 1
-**Requirements**: STRY-01, STRY-02, STRY-03, STRY-04, STRY-05, STRY-06, STRY-07, STRY-08
+**Requirements**: STRY-01, STRY-02, STRY-03, STRY-06, STRY-07, STRY-08 *(STRY-04, STRY-05 deferred)*
 **Effort**: Heavy
 **Success Criteria** (what must be TRUE):
   1. Scope decision is documented as a Key Decision before the first storyboard panel is drawn
@@ -72,14 +72,18 @@ Plans:
 
 **UI hint**: yes
 
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [x] 02-01-PLAN.md — Scope Key Decision + annotated storyboard panel table in Day 3 notes
+- [ ] 02-02-PLAN.md — Confirm 5 Solo Mover participants + finalize Day 3 notes with reflection
 
 ---
 
 ### Phase 3: Day 4 — Prototype
 **Goal**: A clickable Figma prototype runs the primary Solo Mover task flow start to finish without facilitator intervention and is shareable via link for remote testing
 **Depends on**: Phase 2
-**Requirements**: PROT-01, PROT-02, PROT-03, PROT-04, PROT-05, PROT-06, PROT-07, PROT-08, PROT-09
+**Requirements**: PROT-01, PROT-02, PROT-03, PROT-04, PROT-07, PROT-08, PROT-09 *(PROT-05 Couple frames, PROT-06 AR frame deferred)*
 **Effort**: Heavy
 **Success Criteria** (what must be TRUE):
   1. A person unfamiliar with the product can complete the primary task flow (style discovery through checkout confirmation) without explanation
@@ -213,7 +217,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Day 2 — Sketch | 3/3 | Complete | 2026-04-01 |
-| 2. Day 3 — Storyboard | 0/TBD | Not started | - |
+| 2. Day 3 — Storyboard | 0/2 | In progress | - |
 | 3. Day 4 — Prototype | 0/TBD | Not started | - |
 | 4. Day 5 — Test & Validate | 0/TBD | Not started | - |
 | 5. Case Study | 0/TBD | Not started | - |

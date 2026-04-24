@@ -19,12 +19,12 @@ Sprint Days 2–5 plus final case study. Each maps to a roadmap phase.
 
 ### Day 3 — Storyboard
 
-- [ ] **STRY-01**: Scope decision locked before storyboard begins — Solo Mover desktop as prototype spine; documented as a Key Decision
-- [ ] **STRY-02**: Primary storyboard created — 8–12 panels covering the full Solo Mover flow from style discovery through kit selection to checkout
-- [ ] **STRY-03**: Storyboard panels are decision moments and user emotional beats, not UI screenshots — each panel has a label and annotation
-- [ ] **STRY-04**: Couple merge variant panels included (3–4 panels) — style profile comparison, overlap highlight, blended style confirmation
-- [ ] **STRY-05**: AR branch represented in storyboard as a labeled branch point and landing state (not a full storyboard track)
-- [ ] **STRY-06**: Storyboard frames sufficient to build Figma prototype directly — no screen required for the prototype is missing from the storyboard
+- [x] **STRY-01**: Scope decision locked before storyboard begins — Solo Mover desktop as prototype spine; documented as a Key Decision
+- [x] **STRY-02**: Primary storyboard created — 8–12 panels covering the full Solo Mover flow from style discovery through kit selection to checkout
+- [x] **STRY-03**: Storyboard panels are decision moments and user emotional beats, not UI screenshots — each panel has a label and annotation
+- [ ] ~~**STRY-04**: Couple merge variant panels included (3–4 panels)~~ **DEFERRED** — moved to v2 (2026-04-24 scope reduction)
+- [ ] ~~**STRY-05**: AR branch represented in storyboard as a labeled branch point and landing state~~ **DEFERRED** — moved to v2 (2026-04-24 scope reduction)
+- [x] **STRY-06**: Storyboard frames sufficient to build Figma prototype directly — no screen required for the prototype is missing from the storyboard
 - [ ] **STRY-07**: 5 test participants confirmed for Day 5 interviews (from the 11 identified in Day 1)
 - [ ] **STRY-08**: Day 3 work documented in sprint doc (photo of storyboard, reflection on solution selection process)
 
@@ -34,8 +34,8 @@ Sprint Days 2–5 plus final case study. Each maps to a roadmap phase.
 - [ ] **PROT-02**: Four non-negotiable screens built with real-ish content (not lorem ipsum): style selector, A/B kit comparison, collaborative merge/invite, final kit + checkout summary
 - [ ] **PROT-03**: Style selector branch implemented — all three entry points (Know your style / AI suggest / Browse gallery) represented even if only one flows through fully
 - [ ] **PROT-04**: A/B kit comparison × 3 mechanic implemented — user can make selections and see progression
-- [ ] **PROT-05**: Couple branch included as a reachable flow — invite mechanism, side-by-side style profiles, blended style result (3–4 frames)
-- [ ] **PROT-06**: AR "Test in Your Space" represented as a single static concept frame with a clear label — not interactive, not skipped
+- [ ] ~~**PROT-05**: Couple branch included as a reachable flow~~ **DEFERRED** — moved to v2 (2026-04-24 scope reduction)
+- [ ] ~~**PROT-06**: AR "Test in Your Space" represented as a single static concept frame~~ **DEFERRED** — moved to v2 (2026-04-24 scope reduction)
 - [ ] **PROT-07**: Prototype shareable via Figma link for remote testing
 - [ ] **PROT-08**: Professional/Architect flow NOT in prototype — documented as out of scope for the tested instrument
 - [ ] **PROT-09**: Day 4 work documented in sprint doc (Figma link, notes on build decisions and what was intentionally left out)
@@ -99,12 +99,12 @@ Deferred — not in current roadmap. Relevant for future iterations or portfolio
 | SKTCH-05 | Phase 1 — Day 2: Sketch | Complete |
 | SKTCH-06 | Phase 1 — Day 2: Sketch | Pending |
 | SKTCH-07 | Phase 1 — Day 2: Sketch | Pending |
-| STRY-01 | Phase 2 — Day 3: Storyboard | Pending |
-| STRY-02 | Phase 2 — Day 3: Storyboard | Pending |
-| STRY-03 | Phase 2 — Day 3: Storyboard | Pending |
+| STRY-01 | Phase 2 — Day 3: Storyboard | Complete |
+| STRY-02 | Phase 2 — Day 3: Storyboard | Complete |
+| STRY-03 | Phase 2 — Day 3: Storyboard | Complete |
 | STRY-04 | Phase 2 — Day 3: Storyboard | Pending |
 | STRY-05 | Phase 2 — Day 3: Storyboard | Pending |
-| STRY-06 | Phase 2 — Day 3: Storyboard | Pending |
+| STRY-06 | Phase 2 — Day 3: Storyboard | Complete |
 | STRY-07 | Phase 2 — Day 3: Storyboard | Pending |
 | STRY-08 | Phase 2 — Day 3: Storyboard | Pending |
 | PROT-01 | Phase 3 — Day 4: Prototype | Pending |
