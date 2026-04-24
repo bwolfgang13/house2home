@@ -5,6 +5,16 @@
 
 Day 2 produced the lightning demo research (10 competitors), committed A/B Kit Comparison as the primary critical screen, and completed two rounds of Crazy 8s. Day 3 takes the selected interaction model — binary forced-choice kit comparison — and builds it out into a storyboard: a full sequence of screens covering the user arc from landing to order confirmation. The goal is light wireframes sufficient to prototype from, not finished designs.
 
+## Key Decision: Prototype Scope Lock
+
+**Decision:** Solo Mover desktop flow (Screens 1–10) is the prototype spine for Day 4.
+
+**Rationale:** A solo sprint cannot validate three separate flows in a single session. Solo Mover is the critical path because it tests the core A/B kit comparison mechanic that all personas share. Validating this mechanic first is the highest-leverage test available.
+
+**What's deferred:** Couple branch (STRY-04) and AR branch (STRY-05) are deferred — designed but not built in this sprint. The case study will reference them as validated through the design process (storyboarded, not prototyped).
+
+**What's out of scope:** Professional/Architect flow is not storyboarded or prototyped — documented in sprint notes only as a reference for the case study.
+
 ## Solution Sketch Selection
 
 From the Crazy 8s Round 1, the selected interaction model was **"1 or 2 — Pick Your Starter Pack"**: a binary forced-choice screen showing two style-matched kits with no third option, no back-out, no open browsing. Three rounds of this comparison narrow 6 kits to 1.
