@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>house2home — Find Your Style</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Lato:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #1C1C1A; }
+#root { width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+// ─── Tokens ────────────────────────────────────────────────────────────────
+const TK = {
+  bg:          '#FAFAF8',
+  paper:       '#FFFFFF',
+  ink:         '#1C1C1A',
+  inkMid:      '#888884',
+  inkLight:    '#BBBBB8',
+  accent:      '#7A9A7A',
+  accentLight: '#D4E4D4',
+  accentBg:    '#EFF5EF',
+  border:      '#E4E0DA',
+  borderLight: '#F0EDE8',
+  serif:       "'Playfair Display', Georgia, serif",
+  sans:        "'Lato', system-ui, sans-serif",
+};
+
+// ─── Photo helpers ──────────────────────────────────────────────────────────
+const PHOTOS = {
+  hero:          '1616594039964-ae9021a400a0',
+  modernWarm:    '1493663284031-b7e3aefcae8e',
+  calm:          '1616486338812-3dadae4b4ace',
+  bold:          '1532323544230-7191fd51bc1b',
+  earthy:        '1586023492125-27b2c045efd7',
+  studio:        '1583845112203-29329902332e',
+  packAll:       '1631679706909-1844bbd07221',
+  textureRaw:    '1505693416388-ac5ce068fe85',
+  textureSoft:   '1611117775350-ac3950990985',
+  textureSmooth: '1505691723518-36a5ac3be353',
+  cozy:          '1522708323590-d24dbb6b0267',
+  minimal:       '1502005229762-cf1b2da7c5d6',
+  eclectic:      '1564540583246-934409427776',
+  natural:       '1505873242700-f289a29e1e0f',
+  modern:        '1565538810643-b5bdb714032a',
+  vintage:       '1560448204-e02f11c3d0e2',
+  enveloping:    '1522708323590-d24dbb6b0267',
+  tableRunner:   '1604147706283-d7119b5b822c',
+  blackFrame:    '1513519245088-0e12902e5a38',
+  candles:       '1603006905003-be475563bc59',
+  placemats:     '1556910103-1c02745aae4d',
+  print:         '1513519245088-0e12902e5a38',
+  light:         '1513506003901-1e6a229e2d15',
+  accessory:     '1565193566173-7a0ee3dbe261',
+};
+
+function photoUrl(key, w = 800, h = 600) {
+  const id = PHOTOS[key];
+  if (!id) return null;
+  return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=70`;
+}
+
+// ─── Scaled screen wrapper ──────────────────────────────────────────────────
+function Screen({ w, h, children }) {
+  const [scale, setScale] = React.useState(1);
+  React.useEffect(() => {
+    const update = () => setScale(Math.min(window.innerWidth / w, window.innerHeight / h));
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, [w, h]);
+  return (
+    <div style={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: '#1C1C1A' }}>
+      <div style={{ width: w, height: h, transform: `scale(${scale})`, transformOrigin: 'center center', flexShrink: 0 }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ─── Shared components ──────────────────────────────────────────────────────
+function NavBar({ step, onExit }) {
+  return (
+    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 56px', borderBottom: `0.5px solid ${TK.border}`, background: TK.bg, zIndex: 10 }}>
+      <div style={{ fontFamily: TK.serif, fontSize: 17, fontWeight: 300, color: TK.ink, letterSpacing: '0.04em' }}>
+        house<span style={{ color: TK.accent }}>2</span>home
+      </div>
+      {step && <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{step}</div>}
+      <div onClick={onExit} style={{ fontFamily: TK.sans, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: TK.inkLight, cursor: 'pointer' }}>Save & exit</div>
+    </div>
+  );
+}
+
+function ProgressBar({ current, total }) {
+  return (
+    <div style={{ position: 'absolute', top: 68, left: 0, right: 0, height: 2, background: TK.border }}>
+      <div style={{ width: `${(current / total) * 100}%`, height: '100%', background: TK.accent, transition: 'width 0.4s' }} />
+    </div>
+  );
+}
+
+function RoomPhoto({ width, height, photo, label, style: sx = {} }) {
+  const url = photoUrl(photo, typeof width === 'number' ? width * 2 : 1600, typeof height === 'number' ? height * 2 : 1200);
+  const bg = url
+    ? `linear-gradient(160deg,rgba(122,154,122,0.06),rgba(28,28,26,0.18)),url("${url}") center/cover no-repeat`
+    : 'linear-gradient(160deg,#E4EDE0,#CDD8C8)';
+  return (
+    <div style={{ width, height, background: bg, backgroundColor: '#E4EDE0', position: 'relative', overflow: 'hidden', flexShrink: 0, ...sx }}>
+      {label && <div style={{ position: 'absolute', bottom: 10, left: 10, fontFamily: TK.sans, fontSize: 10, color: '#fff', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '5px 10px', background: 'rgba(28,28,26,0.55)', backdropFilter: 'blur(6px)' }}>{label}</div>}
+    </div>
+  );
+}
+
+function Thumb({ size = 40, photo, style: sx = {} }) {
+  const url = photo ? photoUrl(photo, 200, 200) : null;
+  return <div style={{ width: size, height: size, background: url ? `url("${url}") center/cover` : TK.accentBg, backgroundColor: TK.accentBg, flexShrink: 0, ...sx }} />;
+}
+
+function Btn({ label, variant = 'primary', size = 'md', onClick, style: sx = {} }) {
+  const pad = size === 'lg' ? '14px 30px' : size === 'sm' ? '8px 16px' : '11px 24px';
+  const fs = size === 'lg' ? 14 : size === 'sm' ? 12 : 13;
+  const varStyle = variant === 'primary'  ? { background: TK.accent, color: '#fff', border: 'none' } :
+                   variant === 'dark'     ? { background: TK.ink, color: '#fff', border: 'none' } :
+                   variant === 'outline'  ? { background: 'transparent', color: TK.ink, border: `0.5px solid ${TK.border}` } :
+                                            { background: 'transparent', color: TK.inkLight, border: 'none' };
+  return (
+    <div onClick={onClick} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: TK.sans, fontWeight: 500, letterSpacing: '0.05em', cursor: 'pointer', padding: pad, fontSize: fs, ...varStyle, ...sx }}>
+      {label}
+    </div>
+  );
+}
+
+// ─── Pack data ──────────────────────────────────────────────────────────────
+const PACKS = {
+  A: { name: 'The Calm Edit',   desc: 'Soft neutrals, warm light, quiet elegance', tag: 'minimal · neutral · airy',      photo: 'calm',   total: '$79',
+       items: [{ cat: 'Print', name: 'Abstract Minimal No. 3', price: '$24' }, { cat: 'Light', name: 'Woven Pendant Shade', price: '$38' }, { cat: 'Accessory', name: 'Ceramic Bud Vase', price: '$17' }] },
+  B: { name: 'The Bold Layer',  desc: 'Texture, contrast, a little daring',        tag: 'textured · contrast · statement', photo: 'bold',   total: '$94',
+       items: [{ cat: 'Print', name: 'Geometric Statement Print', price: '$28' }, { cat: 'Light', name: 'Arc Floor Lamp', price: '$44' }, { cat: 'Accessory', name: 'Woven Storage Basket', price: '$22' }] },
+  C: { name: 'The Earthy Mix',  desc: 'Plants, raw materials, grounded warmth',    tag: 'natural · organic · grounded',  photo: 'earthy', total: '$78',
+       items: [{ cat: 'Print', name: 'Botanical Study I', price: '$22' }, { cat: 'Light', name: 'Terracotta Table Lamp', price: '$38' }, { cat: 'Accessory', name: 'Rattan Tray', price: '$18' }] },
+  D: { name: 'The Soft Studio', desc: 'Linen, cream, gentle structure',            tag: 'soft · refined · structured',   photo: 'studio', total: '$85',
+       items: [{ cat: 'Print', name: 'Line Art Figure Study', price: '$24' }, { cat: 'Light', name: 'Slim Column Table Lamp', price: '$44' }, { cat: 'Accessory', name: 'Boucle Throw Pillow', price: '$17' }] },
+};
+
+// ─── Placeholder page ────────────────────────────────────────────────────────
+function PlaceholderPage({ title, goBack }) {
+  return (
+    <Screen w={1280} h={720}>
+      <div style={{ width: 1280, height: 720, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+        <NavBar onExit={goBack} />
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 652, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+          <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 500 }}>{title}</div>
+          <h2 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 52, color: TK.ink, lineHeight: 1.1 }}>Under construction.</h2>
+          <p style={{ fontFamily: TK.sans, fontSize: 15, color: TK.inkMid, fontWeight: 300, maxWidth: 400, textAlign: 'center', lineHeight: 1.7 }}>This page is coming soon. Check back after the sprint.</p>
+          <div style={{ marginTop: 16 }}>
+            <Btn label="← Back to home" variant="outline" onClick={goBack} />
+          </div>
+        </div>
+      </div>
+    </Screen>
+  );
+}
+
+// ─── Screen: Landing ────────────────────────────────────────────────────────
+function Landing({ go, goQuiz, goHowItWorks, goAbout }) {
+  const navLinks = [
+    { label: 'How it works', action: goHowItWorks },
+    { label: 'Style quiz',   action: goQuiz },
+    { label: 'About',        action: goAbout },
+  ];
+  return (
+    <Screen w={1440} h={820}>
+      <div style={{ width: 1440, height: 820, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, width: 1440, height: 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 56px', borderBottom: `0.5px solid ${TK.border}`, background: TK.bg, zIndex: 10 }}>
+          <div style={{ fontFamily: TK.serif, fontSize: 18, fontWeight: 300, color: TK.ink, letterSpacing: '0.04em' }}>house<span style={{ color: TK.accent }}>2</span>home</div>
+          <div style={{ display: 'flex', gap: 40 }}>
+            {navLinks.map(({ label, action }) => (
+              <span key={label} onClick={action} style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight, letterSpacing: '0.07em', textTransform: 'uppercase', cursor: 'pointer' }}>{label}</span>
+            ))}
+          </div>
+          <div onClick={go} style={{ fontFamily: TK.sans, fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', color: TK.ink, borderBottom: `1.5px solid ${TK.ink}`, paddingBottom: 2, cursor: 'pointer' }}>Begin →</div>
+        </div>
+        <div style={{ position: 'absolute', top: 68, left: 64, width: 540, height: 752, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingRight: 32 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 30 }}>
+            <div style={{ width: 20, height: 1, background: TK.accent }} />
+            <div style={{ fontFamily: TK.sans, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: TK.accent, fontWeight: 500 }}>Curated for your space</div>
+          </div>
+          <h1 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 80, lineHeight: 1.02, color: TK.ink, letterSpacing: '-0.01em', marginBottom: 30 }}>Find your<br /><span style={{ fontStyle: 'italic' }}>style.</span></h1>
+          <p style={{ fontFamily: TK.sans, fontSize: 16, color: TK.inkMid, lineHeight: 1.75, maxWidth: 380, marginBottom: 44, fontWeight: 300 }}>A starter kit chosen around your taste — a print, a light, an accessory. Nothing more, nothing less.</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 28, marginBottom: 48 }}>
+            <div onClick={go} style={{ background: TK.accent, color: '#fff', fontFamily: TK.sans, fontSize: 13, fontWeight: 500, letterSpacing: '0.06em', padding: '13px 28px', cursor: 'pointer' }}>Find my style →</div>
+            <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkLight }}>Takes 2 minutes</div>
+          </div>
+          <div style={{ display: 'flex', gap: 28 }}>
+            {['Free returns', 'Ships in 3 days', 'Designer curated'].map(b => (
+              <div key={b} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                <div style={{ width: 4, height: 4, borderRadius: '50%', background: TK.accent, opacity: 0.7 }} />
+                <span style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight }}>{b}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{ position: 'absolute', bottom: 10, left: 28, fontFamily: TK.serif, fontStyle: 'italic', fontSize: 220, fontWeight: 300, color: 'rgba(122,154,122,0.07)', lineHeight: 1, pointerEvents: 'none', userSelect: 'none' }}>home</div>
+        <div style={{ position: 'absolute', top: 88, right: 64, width: 620, height: 672 }}>
+          <RoomPhoto width={620} height={672} photo="hero" label="Modern Warm · room photo" />
+          <div style={{ position: 'absolute', top: 0, right: 0, width: 56, height: 56, background: TK.accentLight }} />
+          <div style={{ position: 'absolute', bottom: 32, left: -24, background: TK.bg, padding: '18px 22px', width: 240, borderLeft: `2.5px solid ${TK.accent}`, boxShadow: '0 4px 24px rgba(28,28,26,0.08)' }}>
+            <div style={{ fontFamily: TK.serif, fontSize: 16, fontWeight: 400, color: TK.ink, marginBottom: 4 }}>Modern Warm</div>
+            <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight }}>3 items · est. $79</div>
+          </div>
+        </div>
+      </div>
+    </Screen>
+  );
+}
+
+// ─── Quiz shell ─────────────────────────────────────────────────────────────
+function QuizShell({ step, total, question, sub, children, goBack, goNext, nextLabel = 'Next →', hint, onExit }) {
+  return (
+    <Screen w={1280} h={760}>
+      <div style={{ width: 1280, height: 760, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+        <NavBar step={`Question ${step} of ${total}`} onExit={onExit} />
+        <ProgressBar current={step} total={total} />
+        <div style={{ position: 'absolute', top: 70, left: 0, width: 1280, height: 690, display: 'flex', flexDirection: 'column', padding: '36px 64px 28px' }}>
+          <h2 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 38, color: TK.ink, lineHeight: 1.1, marginBottom: 6 }}>{question}</h2>
+          {sub && <p style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkLight, marginBottom: 28, marginTop: 6 }}>{sub}</p>}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>{children}</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 18 }}>
+            <div onClick={goBack} style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight, letterSpacing: '0.07em', textTransform: 'uppercase', cursor: 'pointer' }}>← Back</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+              {hint && <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid }}>{hint}</div>}
+              <Btn label={nextLabel} onClick={goNext} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </Screen>
+  );
+}
+
+// ─── Quiz Q1 ────────────────────────────────────────────────────────────────
+function QuizQ1({ sel, toggle, goBack, goNext, onExit }) {
+  const opts = [
+    { label: 'Warm & cozy',        sub: 'textures, earth tones',   photo: 'cozy' },
+    { label: 'Clean & minimal',    sub: 'whites, light wood',       photo: 'minimal' },
+    { label: 'Bold & eclectic',    sub: 'color, pattern, contrast', photo: 'eclectic' },
+    { label: 'Natural & organic',  sub: 'plants, raw materials',    photo: 'natural' },
+    { label: 'Modern & sleek',     sub: 'metal, glass, geometry',   photo: 'modern' },
+    { label: 'Vintage & lived-in', sub: 'antiques, patina',         photo: 'vintage' },
+  ];
+  const hint = sel.size === 0 ? '' : `${sel.size} selected`;
+  return (
+    <QuizShell step={1} total={6} question="When you walk into a room you love, it usually feels…" sub="Pick as many as feel right" goBack={goBack} goNext={goNext} hint={hint} onExit={onExit}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12, flex: 1 }}>
+        {opts.map((o) => {
+          const on = sel.has(o.label);
+          return (
+            <div key={o.label} onClick={() => toggle(o.label)} style={{ background: TK.paper, overflow: 'hidden', cursor: 'pointer', border: on ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, boxShadow: on ? '0 4px 16px rgba(122,154,122,0.14)' : 'none', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ height: 96, position: 'relative', flexShrink: 0 }}>
+                <RoomPhoto width="100%" height={96} photo={o.photo} label={null} />
+                {on && <div style={{ position: 'absolute', top: 8, right: 8, width: 20, height: 20, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
+              </div>
+              <div style={{ padding: '12px 16px' }}>
+                <div style={{ fontFamily: TK.sans, fontSize: 14, fontWeight: 500, color: TK.ink }}>{o.label}</div>
+                <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid, marginTop: 3 }}>{o.sub}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </QuizShell>
+  );
+}
+
+// ─── Quiz Q2 ────────────────────────────────────────────────────────────────
+function QuizQ2({ sel, setSel, goBack, goNext, onExit }) {
+  const palettes = [
+    { label: 'Warm & earthy',  colors: ['#C4A882','#8B6E4E','#E8DDD0','#5C4030'] },
+    { label: 'Cool & calm',    colors: ['#8CA8B4','#4E6E7E','#D4E0E8','#2A4050'] },
+    { label: 'Soft & natural', colors: ['#B8C4A0','#7A9068','#E4ECD8','#3A5028'] },
+    { label: 'Rich & moody',   colors: ['#987080','#6A4858','#E0D0D4','#380028'] },
+  ];
+  return (
+    <QuizShell step={2} total={6} question="Which color story feels most like home?" sub="Choose one" goBack={goBack} goNext={goNext} onExit={onExit}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 14, flex: 1 }}>
+        {palettes.map((p) => {
+          const on = sel === p.label;
+          return (
+            <div key={p.label} onClick={() => setSel(p.label)} style={{ background: TK.paper, cursor: 'pointer', overflow: 'hidden', border: on ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, boxShadow: on ? '0 4px 16px rgba(122,154,122,0.14)' : 'none', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', height: 100, flexShrink: 0 }}>{p.colors.map((c, i) => <div key={i} style={{ flex: 1, background: c }} />)}</div>
+              <div style={{ padding: '12px 18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ fontFamily: TK.sans, fontSize: 14, fontWeight: 500, color: TK.ink }}>{p.label}</div>
+                {on && <div style={{ width: 18, height: 18, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ color: '#fff', fontSize: 10 }}>✓</span></div>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </QuizShell>
+  );
+}
+
+// ─── Quiz Q3 ────────────────────────────────────────────────────────────────
+function QuizQ3({ sel, toggle, goBack, goNext, onExit }) {
+  const opts = [
+    { label: 'Natural & raw',  desc: 'Wood grain, stone, linen, rattan — materials that feel alive', subs: ['Wooden shelves', 'Stone vessels', 'Linen throws'], photo: 'textureRaw' },
+    { label: 'Soft & layered', desc: 'Velvet, boucle, wool, silk — warmth you can feel',             subs: ['Boucle cushions', 'Knit blankets', 'Velvet accents'], photo: 'textureSoft' },
+    { label: 'Clean & smooth', desc: 'Glass, ceramic, lacquered wood — quiet, considered surfaces',  subs: ['Ceramic vessels', 'Glass objects', 'Lacquered trays'], photo: 'textureSmooth' },
+  ];
+  const hint = sel.size === 0 ? '' : `${sel.size} selected`;
+  return (
+    <QuizShell step={3} total={6} question="What textures draw you in most?" sub="Pick as many as feel right" goBack={goBack} goNext={goNext} hint={hint} onExit={onExit}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
+        {opts.map((o) => {
+          const on = sel.has(o.label);
+          return (
+            <div key={o.label} onClick={() => toggle(o.label)} style={{ background: TK.paper, cursor: 'pointer', flex: 1, border: on ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+              <RoomPhoto width={160} height="100%" photo={o.photo} label={null} style={{ alignSelf: 'stretch' }} />
+              <div style={{ padding: '16px 24px', flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+                  <div style={{ fontFamily: TK.sans, fontSize: 15, fontWeight: 500, color: TK.ink }}>{o.label}</div>
+                  {on && <div style={{ width: 18, height: 18, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><span style={{ color: '#fff', fontSize: 10 }}>✓</span></div>}
+                </div>
+                <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, marginBottom: 8 }}>{o.desc}</div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  {o.subs.map(s => <div key={s} style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, padding: '3px 10px', border: `0.5px solid ${TK.border}` }}>{s}</div>)}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </QuizShell>
+  );
+}
+
+// ─── Quiz Q4 ────────────────────────────────────────────────────────────────
+function QuizQ4({ sel, setSel, goBack, goNext, onExit }) {
+  const opts = [
+    { label: 'Open & airy',       desc: 'Light floods in. Everything has space to breathe. The room feels like an exhale.', photo: 'minimal' },
+    { label: 'Warm & enveloping', desc: 'Soft light. Layered textures. The room pulls you in and holds you there.',         photo: 'enveloping' },
+  ];
+  return (
+    <QuizShell step={4} total={6} question="How do you want your home to feel at the end of the day?" sub="Choose one" goBack={goBack} goNext={goNext} onExit={onExit}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 14, flex: 1 }}>
+        {opts.map((o) => {
+          const on = sel === o.label;
+          return (
+            <div key={o.label} onClick={() => setSel(o.label)} style={{ background: TK.paper, cursor: 'pointer', overflow: 'hidden', border: on ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, boxShadow: on ? '0 4px 16px rgba(122,154,122,0.14)' : 'none', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ flex: 1, position: 'relative', minHeight: 0 }}><RoomPhoto width="100%" height="100%" photo={o.photo} label={null} /></div>
+              <div style={{ padding: '20px 24px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                  <div style={{ fontFamily: TK.serif, fontSize: 22, fontWeight: 300, color: TK.ink }}>{o.label}</div>
+                  {on && <div style={{ width: 20, height: 20, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
+                </div>
+                <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, lineHeight: 1.6, fontStyle: 'italic' }}>{o.desc}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </QuizShell>
+  );
+}
+
+// ─── Quiz Q5 ────────────────────────────────────────────────────────────────
+function QuizQ5({ sel, toggle, goBack, goNext, onExit }) {
+  const words = ['Calm','Curated','Layered','Simple','Refined','Earthy','Playful','Sophisticated','Cozy','Airy','Natural','Bold','Minimal','Warm','Lived-in','Striking','Personal','Inviting'];
+  const hint = sel.size === 0 ? '' : `${sel.size} selected`;
+  return (
+    <QuizShell step={5} total={6} question="Pick the words that feel like you." sub="Choose as many as you like" goBack={goBack} goNext={goNext} hint={hint} onExit={onExit}>
+      <div style={{ flex: 1, display: 'flex', alignContent: 'flex-start', flexWrap: 'wrap', gap: 10, alignItems: 'flex-start', paddingTop: 8 }}>
+        {words.map((w) => {
+          const on = sel.has(w);
+          return (
+            <div key={w} onClick={() => toggle(w)} style={{ fontFamily: TK.sans, fontSize: 14, padding: '10px 20px', cursor: 'pointer', background: on ? TK.accentBg : TK.paper, border: on ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, color: on ? TK.accent : TK.ink, fontWeight: on ? 500 : 400 }}>{w}</div>
+          );
+        })}
+      </div>
+    </QuizShell>
+  );
+}
+
+// ─── Quiz Q6 ────────────────────────────────────────────────────────────────
+function QuizQ6({ sel, setSel, goBack, goNext, onExit }) {
+  const opts = [
+    { label: 'The right light',       desc: 'Lighting changes everything. I want a piece that sets the mood.' },
+    { label: 'A statement print',     desc: 'One piece of art that gives the wall a reason to exist.' },
+    { label: 'A standout accessory',  desc: 'Something on the shelf or table that makes you stop and look.' },
+    { label: 'A cohesive look',       desc: "I don't know where to start — I want it all to work together." },
+  ];
+  return (
+    <QuizShell step={6} total={6} question="What would make the biggest difference in your space right now?" sub="Choose one" goBack={goBack} goNext={goNext} nextLabel="See my style →" onExit={onExit}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 12, flex: 1 }}>
+        {opts.map((o) => {
+          const on = sel === o.label;
+          return (
+            <div key={o.label} onClick={() => setSel(o.label)} style={{ background: on ? TK.accentBg : TK.paper, cursor: 'pointer', border: on ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, padding: '24px 28px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+                  <div style={{ fontFamily: TK.serif, fontSize: 22, fontWeight: 300, color: TK.ink, lineHeight: 1.1 }}>{o.label}</div>
+                  {on && <div style={{ width: 20, height: 20, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: 12 }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
+                </div>
+                <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, lineHeight: 1.6 }}>{o.desc}</div>
+              </div>
+              <div style={{ marginTop: 20, width: '100%', height: 60, background: on ? 'rgba(122,154,122,0.12)' : TK.borderLight }} />
+            </div>
+          );
+        })}
+      </div>
+    </QuizShell>
+  );
+}
+
+// ─── Style Result ───────────────────────────────────────────────────────────
+function StyleResult({ go, goBack, onExit }) {
+  return (
+    <Screen w={1280} h={720}>
+      <div style={{ width: 1280, height: 720, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+        <NavBar onExit={onExit} />
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 652, display: 'flex' }}>
+          <div style={{ width: '46%', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 56px 0 64px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+              <div style={{ width: 18, height: 1, background: TK.accent }} />
+              <span style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>Based on your answers</span>
+            </div>
+            <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Your style is</div>
+            <h1 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 62, color: TK.ink, lineHeight: 1.04, marginBottom: 6 }}>Modern</h1>
+            <h1 style={{ fontFamily: TK.serif, fontWeight: 300, fontStyle: 'italic', fontSize: 62, color: TK.accent, lineHeight: 1.04, marginBottom: 24 }}>Warm</h1>
+            <p style={{ fontFamily: TK.sans, fontSize: 15, color: TK.inkMid, lineHeight: 1.72, maxWidth: 360, marginBottom: 28, fontWeight: 300 }}>Clean structure with warmth underneath. You're drawn to natural materials, quiet tones, and pieces that feel considered rather than decorated.</p>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 36 }}>
+              {['natural · organic', 'warm tones', 'clean lines', 'considered pieces'].map(t => <div key={t} style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkMid, padding: '5px 12px', border: `0.5px solid ${TK.border}` }}>{t}</div>)}
+            </div>
+            <Btn label="Pick my starter pack →" size="lg" onClick={go} />
+            <div style={{ marginTop: 14 }}>
+              <span onClick={goBack} style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight, cursor: 'pointer', textDecoration: 'underline' }}>Retake quiz</span>
+            </div>
+          </div>
+          <div style={{ flex: 1, position: 'relative' }}>
+            <RoomPhoto width="100%" height={652} photo="modernWarm" label="Modern Warm · example room" />
+            <div style={{ position: 'absolute', top: 0, right: 0, width: 52, height: 52, background: TK.accentLight }} />
+          </div>
+        </div>
+      </div>
+    </Screen>
+  );
+}
+
+// ─── Pack Round ─────────────────────────────────────────────────────────────
+function PackRound({ round, leftKey, rightKey, onChoose, goBack, onExit }) {
+  function Card({ packKey, advancing }) {
+    const p = PACKS[packKey];
+    return (
+      <div onClick={() => onChoose(packKey)} style={{ flex: 1, background: TK.paper, display: 'flex', flexDirection: 'column', border: advancing ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, boxShadow: advancing ? '0 4px 24px rgba(122,154,122,0.13)' : '0 2px 8px rgba(28,28,26,0.04)', cursor: 'pointer', overflow: 'hidden' }}>
+        <div style={{ padding: '14px 20px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'inline-flex', padding: '3px 10px', background: advancing ? TK.accentBg : '#EEF2F7', fontFamily: TK.sans, fontSize: 10, fontWeight: 500, color: advancing ? TK.accent : '#6A7F9A', letterSpacing: '0.07em', textTransform: 'uppercase' }}>
+            {advancing ? '↑ Your pick' : 'Challenger'}
+          </div>
+          <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight }}>Pack {packKey}</div>
+        </div>
+        <RoomPhoto width="100%" height={240} photo={p.photo} label={`Pack ${packKey} · styled mood`} />
+        <div style={{ padding: '20px 22px 16px' }}>
+          <div style={{ fontFamily: TK.serif, fontSize: 26, fontWeight: 400, color: TK.ink, lineHeight: 1.1, marginBottom: 6 }}>{p.name}</div>
+          <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, fontWeight: 300, lineHeight: 1.5 }}>{p.desc}</div>
+        </div>
+        <div style={{ padding: '0 22px 16px', display: 'flex', gap: 6 }}>
+          {p.items.map(item => <div key={item.cat} style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, padding: '3px 10px', border: `0.5px solid ${TK.border}`, letterSpacing: '0.04em' }}>{item.cat}</div>)}
+        </div>
+        <div style={{ padding: '12px 22px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', borderTop: `0.5px solid ${TK.borderLight}` }}>
+          <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkLight }}>{p.total}</div>
+          <Btn label={`Choose Pack ${packKey} →`} variant={advancing ? 'primary' : 'outline'} size="sm" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <Screen w={1280} h={820}>
+      <div style={{ width: 1280, height: 820, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+        <NavBar step="Pick your pack" onExit={onExit} />
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 752, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px 56px 24px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginBottom: 22 }}>
+            <div style={{ display: 'flex', gap: 6 }}>
+              {[1,2,3].map(i => <div key={i} style={{ height: 5, borderRadius: 2.5, width: i === round ? 22 : 5, background: i <= round ? TK.accent : TK.border }} />)}
+            </div>
+            <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Round {round} of 3</div>
+          </div>
+          <h2 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 40, color: TK.ink, marginBottom: 4, textAlign: 'center' }}>Which feels more like you?</h2>
+          <p style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, marginBottom: 28, textAlign: 'center', fontWeight: 300 }}>
+            {round === 1 ? 'Two packs, curated for your Modern Warm style' : `Pack ${leftKey} carries forward — here's your next challenge`}
+          </p>
+          <div style={{ display: 'flex', width: '100%', flex: 1, position: 'relative', minHeight: 0 }}>
+            <Card packKey={leftKey} advancing={round > 1} />
+            <div style={{ width: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
+              <div style={{ width: 32, height: 32, borderRadius: '50%', background: TK.bg, border: `0.5px solid ${TK.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'absolute' }}>
+                <span style={{ fontFamily: TK.serif, fontSize: 13, color: TK.inkMid, fontStyle: 'italic' }}>or</span>
+              </div>
+            </div>
+            <Card packKey={rightKey} advancing={false} />
+          </div>
+          <div style={{ marginTop: 14 }}>
+            <span onClick={goBack} style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, cursor: 'pointer', letterSpacing: '0.07em', textTransform: 'uppercase' }}>← Start over</span>
+          </div>
+        </div>
+      </div>
+    </Screen>
+  );
+}
+
+// ─── Pack Reveal ─────────────────────────────────────────────────────────────
+function PackReveal({ goCart, goAR, goBack, onExit }) {
+  const pack = PACKS['D'];
+  const itemPhotos = { Print: 'print', Light: 'light', Accessory: 'accessory' };
+  return (
+    <Screen w={1280} h={800}>
+      <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+        <NavBar onExit={onExit} />
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex' }}>
+          <div style={{ width: '44%', padding: '44px 44px 44px 64px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
+              <div style={{ width: 18, height: 1, background: TK.accent }} />
+              <span style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>3 rounds complete</span>
+            </div>
+            <h1 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 46, color: TK.ink, lineHeight: 1.06, marginBottom: 4 }}>Your Starter Pack</h1>
+            <h2 style={{ fontFamily: TK.serif, fontWeight: 300, fontStyle: 'italic', fontSize: 32, color: TK.accent, marginBottom: 22 }}>{pack.name}</h2>
+            <p style={{ fontFamily: TK.sans, fontSize: 14, color: TK.inkMid, lineHeight: 1.65, marginBottom: 20, fontWeight: 300, maxWidth: 340 }}>{pack.desc}</p>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 24 }}>
+              {pack.tag.split(' · ').map(t => <div key={t} style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkMid, padding: '4px 11px', border: `0.5px solid ${TK.border}` }}>{t}</div>)}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
+              {pack.items.map(item => (
+                <div key={item.cat} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: TK.paper, border: `0.5px solid ${TK.border}` }}>
+                  <Thumb size={40} photo={itemPhotos[item.cat]} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: TK.sans, fontSize: 10, color: TK.inkLight }}>{item.cat}</div>
+                    <div style={{ fontFamily: TK.sans, fontSize: 13, fontWeight: 500, color: TK.ink }}>{item.name}</div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.ink }}>{item.price}</div>
+                    <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, textDecoration: 'underline', cursor: 'pointer', marginTop: 2 }}>swap</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 14 }}>
+              <div>
+                <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>Est. total</div>
+                <div style={{ fontFamily: TK.serif, fontSize: 42, fontWeight: 300, color: TK.ink }}>{pack.total}</div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <Btn label="Add to Cart →" variant="primary" size="lg" onClick={goCart} />
+                <Btn label="Try in My Room" variant="outline" onClick={goAR} />
+              </div>
+            </div>
+            <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight }}>
+              Free shipping · 30-day returns · <span onClick={goBack} style={{ textDecoration: 'underline', cursor: 'pointer' }}>Start over</span>
+            </div>
+          </div>
+          <div style={{ flex: 1, position: 'relative' }}>
+            <RoomPhoto width="100%" height={732} photo="packAll" label="All 3 items styled in your space" />
+            <div style={{ position: 'absolute', top: 0, right: 0, width: 52, height: 52, background: TK.accentLight }} />
+            {[{ label: 'Print', top: '18%', left: '12%' }, { label: 'Light', top: '55%', left: '54%' }, { label: 'Accessory', top: '74%', left: '16%' }].map(({ label, top, left }) => (
+              <div key={label} style={{ position: 'absolute', top, left, background: 'rgba(250,250,248,0.9)', border: `0.5px solid ${TK.border}`, padding: '4px 11px', fontFamily: TK.sans, fontSize: 10, color: TK.ink, letterSpacing: '0.07em', textTransform: 'uppercase' }}>{label}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </Screen>
+  );
+}
+
+// ─── AR Placeholder ──────────────────────────────────────────────────────────
+function ARScreen({ goCart, goBack, onExit }) {
+  return (
+    <Screen w={1280} h={720}>
+      <div style={{ width: 1280, height: 720, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+        <NavBar step="Try in your room" onExit={onExit} />
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 652, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 64px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <div style={{ width: 18, height: 1, background: TK.accent }} />
+            <span style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>See it before you buy</span>
+          </div>
+          <h2 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 44, color: TK.ink, marginBottom: 10, textAlign: 'center' }}>Try in Your Room</h2>
+          <p style={{ fontFamily: TK.sans, fontSize: 15, color: TK.inkMid, marginBottom: 40, textAlign: 'center', fontWeight: 300, maxWidth: 480, lineHeight: 1.65 }}>Upload a photo of your space and see exactly how your pack will look before you commit.</p>
+          <div style={{ width: '100%', maxWidth: 720, border: `1px dashed ${TK.border}`, padding: '56px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, background: TK.paper }}>
+            <div style={{ width: 48, height: 48, borderRadius: '50%', background: TK.accentBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: 20, height: 20, border: `1.5px solid ${TK.accent}`, borderRadius: 2 }} />
+            </div>
+            <div style={{ fontFamily: TK.serif, fontSize: 20, fontWeight: 300, color: TK.ink }}>Upload a photo of your space</div>
+            <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid }}>JPG or PNG · up to 10MB</div>
+            <Btn label="Choose photo" variant="outline" size="sm" />
+          </div>
+          <div style={{ marginTop: 20, display: 'flex', gap: 24, alignItems: 'center' }}>
+            <div style={{ height: '0.5px', width: 120, background: TK.border }} />
+            <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight }}>or skip for now</div>
+            <div style={{ height: '0.5px', width: 120, background: TK.border }} />
+          </div>
+          <div style={{ marginTop: 16 }}>
+            <Btn label="Continue to cart →" onClick={goCart} />
+          </div>
+        </div>
+      </div>
+    </Screen>
+  );
+}
+
+// ─── Cart ────────────────────────────────────────────────────────────────────
+function CartPage({ goNext, goBack, onExit }) {
+  const pack = PACKS['D'];
+  const items = [
+    { cat: 'Print',     name: 'Line Art Figure Study',  price: 24, sub: '8×10" · unframed', photo: 'print' },
+    { cat: 'Light',     name: 'Slim Column Table Lamp', price: 44, sub: 'H 18" · linen shade', photo: 'light' },
+    { cat: 'Accessory', name: 'Boucle Throw Pillow',    price: 17, sub: '18×18" · ivory', photo: 'accessory' },
+  ];
+  const addons = [
+    { name: 'Linen Table Runner',  cat: 'Accessory', price: 22, photo: 'tableRunner' },
+    { name: 'Matte Black Frame',   cat: 'Frame',     price: 18, photo: 'blackFrame' },
+    { name: 'Taper Candle Set',    cat: 'Accessory', price: 14, photo: 'candles' },
+    { name: 'Woven Placemat Set',  cat: 'Accessory', price: 28, photo: 'placemats' },
+  ];
+  const subtotal = items.reduce((s, i) => s + i.price, 0);
+  return (
+    <Screen w={1280} h={820}>
+      <div style={{ width: 1280, height: 820, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+        <NavBar step="Your cart" onExit={onExit} />
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 752, display: 'flex' }}>
+          <div style={{ flex: 1, padding: '36px 40px 36px 64px', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ marginBottom: 32 }}>
+              <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 14 }}>Your starter pack</div>
+              <div style={{ background: TK.paper, border: `0.5px solid ${TK.border}`, overflow: 'hidden' }}>
+                <RoomPhoto width="100%" height={160} photo="studio" label="Pack styled in your space" />
+                <div style={{ padding: '16px 20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 14 }}>
+                    <div style={{ fontFamily: TK.serif, fontSize: 22, fontWeight: 400, color: TK.ink }}>{pack.name}</div>
+                    <div style={{ fontFamily: TK.serif, fontSize: 22, fontWeight: 300, color: TK.ink }}>${subtotal}</div>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {items.map(item => (
+                      <div key={item.cat} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <Thumb size={36} photo={item.photo} />
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontFamily: TK.sans, fontSize: 10, color: TK.inkLight }}>{item.cat}</div>
+                          <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.ink }}>{item.name}</div>
+                          <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkMid }}>{item.sub}</div>
+                        </div>
+                        <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid }}>${item.price}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 14 }}>You might also like</div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
+                {addons.map(a => (
+                  <div key={a.name} style={{ background: TK.paper, border: `0.5px solid ${TK.border}`, cursor: 'pointer', overflow: 'hidden' }}>
+                    <RoomPhoto width="100%" height={96} photo={a.photo} label={null} />
+                    <div style={{ padding: '10px 12px' }}>
+                      <div style={{ fontFamily: TK.sans, fontSize: 10, color: TK.inkLight, marginBottom: 2 }}>{a.cat}</div>
+                      <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.ink, marginBottom: 6 }}>{a.name}</div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid }}>${a.price}</div>
+                        <div style={{ fontFamily: TK.sans, fontSize: 10, color: TK.accent, letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>+ Add</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div style={{ width: 320, padding: '36px 32px', borderLeft: `0.5px solid ${TK.border}`, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 20 }}>Order summary</div>
+            <div style={{ flex: 1 }}>
+              {[['Starter pack', `$${subtotal}`], ['Shipping', 'Free'], ['Estimated tax', '$6.50']].map(([l, v]) => (
+                <div key={l} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
+                  <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid }}>{l}</div>
+                  <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.ink }}>{v}</div>
+                </div>
+              ))}
+              <div style={{ borderTop: `0.5px solid ${TK.border}`, paddingTop: 14, display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+                <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.ink, fontWeight: 500 }}>Total</div>
+                <div style={{ fontFamily: TK.serif, fontSize: 26, fontWeight: 300, color: TK.ink }}>${subtotal + 6.50}</div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 24 }}>
+              <Btn label="Proceed to checkout →" variant="primary" size="lg" onClick={goNext} style={{ width: '100%' }} />
+              <Btn label="← Back to pack" variant="ghost" onClick={goBack} style={{ width: '100%', fontSize: 12 }} />
+            </div>
+            <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, marginTop: 20, lineHeight: 1.6, textAlign: 'center' }}>Free shipping on all orders<br />Easy 30-day returns</div>
+          </div>
+        </div>
+      </div>
+    </Screen>
+  );
+}
+
+// ─── Checkout ────────────────────────────────────────────────────────────────
+function CheckoutPage({ goNext, goBack, onExit }) {
+  const items = [
+    { cat: 'Print',     name: 'Line Art Figure Study',  price: 24 },
+    { cat: 'Light',     name: 'Slim Column Table Lamp', price: 44 },
+    { cat: 'Accessory', name: 'Boucle Throw Pillow',    price: 17 },
+  ];
+  const subtotal = items.reduce((s, i) => s + i.price, 0);
+
+  function Field({ label, placeholder, half }) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 5, flex: half ? '0 0 calc(50% - 6px)' : '1 1 100%' }}>
+        <label style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkMid, letterSpacing: '0.06em', textTransform: 'uppercase' }}>{label}</label>
+        <div style={{ border: `0.5px solid ${TK.border}`, padding: '10px 14px', background: TK.paper, fontFamily: TK.sans, fontSize: 13, color: TK.inkLight }}>{placeholder}</div>
+      </div>
+    );
+  }
+
+  function Section({ title, children }) {
+    return (
+      <div style={{ marginBottom: 32 }}>
+        <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16, paddingBottom: 10, borderBottom: `0.5px solid ${TK.border}` }}>{title}</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>{children}</div>
+      </div>
+    );
+  }
+
+  return (
+    <Screen w={1280} h={860}>
+      <div style={{ width: 1280, height: 860, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+        <NavBar step="Checkout" onExit={onExit} />
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 792, display: 'flex' }}>
+          <div style={{ flex: 1, padding: '36px 48px 36px 64px', overflowY: 'auto' }}>
+            <Section title="Contact"><Field label="Email address" placeholder="your@email.com" /></Section>
+            <Section title="Shipping address">
+              <Field label="First name" placeholder="Jane" half /><Field label="Last name" placeholder="Smith" half />
+              <Field label="Street address" placeholder="123 Main St" />
+              <Field label="Apt / Suite" placeholder="Apt 4B" half /><Field label="City" placeholder="New York" half />
+              <Field label="State" placeholder="NY" half /><Field label="ZIP code" placeholder="10001" half />
+            </Section>
+            <Section title="Payment">
+              <Field label="Card number" placeholder="1234  5678  9012  3456" />
+              <Field label="Name on card" placeholder="Jane Smith" />
+              <Field label="Expiry" placeholder="MM / YY" half /><Field label="CVV" placeholder="•••" half />
+            </Section>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Btn label="← Back to cart" variant="ghost" onClick={goBack} style={{ fontSize: 12 }} />
+              <Btn label="Place order →" variant="primary" size="lg" onClick={goNext} />
+            </div>
+          </div>
+          <div style={{ width: 300, padding: '36px 32px', borderLeft: `0.5px solid ${TK.border}`, display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
+            <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Your order</div>
+            <RoomPhoto width="100%" height={120} photo="studio" label="The Soft Studio" style={{ marginBottom: 16 }} />
+            <div style={{ fontFamily: TK.serif, fontSize: 18, fontWeight: 400, color: TK.ink, marginBottom: 12 }}>The Soft Studio</div>
+            <div style={{ flex: 1 }}>
+              {items.map(item => (
+                <div key={item.cat} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                  <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid }}>{item.name}</div>
+                  <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid }}>${item.price}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ borderTop: `0.5px solid ${TK.border}`, paddingTop: 12, marginTop: 8 }}>
+              {[['Subtotal', `$${subtotal}`], ['Shipping', 'Free'], ['Tax', '$6.50']].map(([l, v]) => (
+                <div key={l} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                  <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid }}>{l}</div>
+                  <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid }}>{v}</div>
+                </div>
+              ))}
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+                <div style={{ fontFamily: TK.sans, fontSize: 13, fontWeight: 500, color: TK.ink }}>Total</div>
+                <div style={{ fontFamily: TK.serif, fontSize: 22, fontWeight: 300, color: TK.ink }}>${subtotal + 6.50}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Screen>
+  );
+}
+
+// ─── Order Confirmation ──────────────────────────────────────────────────────
+function OrderConfirm({ onExit }) {
+  const items = [
+    { cat: 'Print',     name: 'Line Art Figure Study',  price: 24, photo: 'print' },
+    { cat: 'Light',     name: 'Slim Column Table Lamp', price: 44, photo: 'light' },
+    { cat: 'Accessory', name: 'Boucle Throw Pillow',    price: 17, photo: 'accessory' },
+  ];
+  const total = items.reduce((s, i) => s + i.price, 0) + 6.50;
+  return (
+    <Screen w={1280} h={720}>
+      <div style={{ width: 1280, height: 720, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+        <NavBar onExit={onExit} />
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 652, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 64px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 36 }}>
+            <div style={{ width: 48, height: 48, borderRadius: '50%', background: TK.accentBg, border: `1.5px solid ${TK.accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+              <span style={{ color: TK.accent, fontSize: 20 }}>✓</span>
+            </div>
+            <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>Order confirmed</div>
+            <h1 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 50, color: TK.ink, marginBottom: 8, lineHeight: 1.05 }}>You're all set.</h1>
+            <p style={{ fontFamily: TK.sans, fontSize: 15, color: TK.inkMid, fontWeight: 300, maxWidth: 480, margin: '0 auto', lineHeight: 1.65 }}>Your Modern Warm starter pack is on its way. You made great choices — trust your taste.</p>
+          </div>
+          <div style={{ background: TK.paper, border: `0.5px solid ${TK.border}`, width: '100%', maxWidth: 780, display: 'flex', overflow: 'hidden' }}>
+            <RoomPhoto width={220} height={220} photo="studio" label="The Soft Studio" />
+            <div style={{ flex: 1, padding: '24px 28px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <div style={{ fontFamily: TK.serif, fontSize: 22, fontWeight: 400, color: TK.ink, marginBottom: 4 }}>The Soft Studio</div>
+              <div style={{ display: 'flex', gap: 20, marginBottom: 14 }}>
+                <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid }}>Order #H2H-00482</div>
+                <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid }}>Est. delivery May 6–8</div>
+              </div>
+              <div style={{ display: 'flex', gap: 16 }}>
+                {items.map(item => (
+                  <div key={item.cat} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Thumb size={32} photo={item.photo} />
+                    <div>
+                      <div style={{ fontFamily: TK.sans, fontSize: 10, color: TK.inkLight }}>{item.cat}</div>
+                      <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.ink }}>{item.name}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div style={{ width: 160, padding: '24px 20px', borderLeft: `0.5px solid ${TK.border}`, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+              <div style={{ fontFamily: TK.serif, fontSize: 30, fontWeight: 300, color: TK.ink, marginBottom: 4 }}>${total}</div>
+              <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, marginBottom: 16 }}>incl. tax</div>
+              <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkMid, lineHeight: 1.5 }}>A confirmation<br />email is on its way.</div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 16, marginTop: 24 }}>
+            <Btn label="Track my order" variant="outline" />
+            <Btn label="Style tips for your pack →" variant="primary" />
+          </div>
+        </div>
+      </div>
+    </Screen>
+  );
+}
+
+// ─── App ─────────────────────────────────────────────────────────────────────
+function App() {
+  const [history, setHistory] = React.useState([0]);
+  const screen = history[history.length - 1];
+
+  const go = (n) => setHistory(h => [...h, n]);
+  const back = () => setHistory(h => h.length > 1 ? h.slice(0, -1) : h);
+
+  // Quiz state — all blank by default
+  const [q1, setQ1] = React.useState(() => new Set());
+  const [q2, setQ2] = React.useState(null);
+  const [q3, setQ3] = React.useState(() => new Set());
+  const [q4, setQ4] = React.useState(null);
+  const [q5, setQ5] = React.useState(() => new Set());
+  const [q6, setQ6] = React.useState(null);
+
+  // Pack tournament state
+  const [packR1, setPackR1] = React.useState('A');
+  const [packR2, setPackR2] = React.useState('A');
+
+  function toggle(setter) {
+    return (val) => setter(prev => {
+      const next = new Set(prev);
+      next.has(val) ? next.delete(val) : next.add(val);
+      return next;
+    });
+  }
+
+  // Screens: 0=Landing, 1=Q1, 2=Q2, 3=Q3, 4=Q4, 5=Q5, 6=Q6,
+  //          7=StyleResult, 8=PackR1, 9=PackR2, 10=PackR3,
+  //          11=PackReveal, 12=AR, 13=Cart, 14=Checkout, 15=OrderConfirm
+
+  const onExit = () => go(0);
+
+  if (screen === 0) return <Landing go={() => go(1)} goQuiz={() => go(1)} goHowItWorks={() => go(16)} goAbout={() => go(17)} />;
+  if (screen === 16) return <PlaceholderPage title="How it works" goBack={() => go(0)} />;
+  if (screen === 17) return <PlaceholderPage title="About" goBack={() => go(0)} />;
+
+  if (screen === 1) return <QuizQ1 sel={q1} toggle={toggle(setQ1)} goBack={back} goNext={() => go(2)} onExit={onExit} />;
+  if (screen === 2) return <QuizQ2 sel={q2} setSel={setQ2} goBack={back} goNext={() => go(3)} onExit={onExit} />;
+  if (screen === 3) return <QuizQ3 sel={q3} toggle={toggle(setQ3)} goBack={back} goNext={() => go(4)} onExit={onExit} />;
+  if (screen === 4) return <QuizQ4 sel={q4} setSel={setQ4} goBack={back} goNext={() => go(5)} onExit={onExit} />;
+  if (screen === 5) return <QuizQ5 sel={q5} toggle={toggle(setQ5)} goBack={back} goNext={() => go(6)} onExit={onExit} />;
+  if (screen === 6) return <QuizQ6 sel={q6} setSel={setQ6} goBack={back} goNext={() => go(7)} onExit={onExit} />;
+
+  if (screen === 7) return <StyleResult go={() => go(8)} goBack={() => go(1)} onExit={onExit} />;
+
+  if (screen === 8) return (
+    <PackRound round={1} leftKey="A" rightKey="B"
+      onChoose={(k) => { setPackR1(k); go(9); }}
+      goBack={() => go(7)} onExit={onExit} />
+  );
+  if (screen === 9) return (
+    <PackRound round={2} leftKey={packR1} rightKey="C"
+      onChoose={(k) => { setPackR2(k); go(10); }}
+      goBack={back} onExit={onExit} />
+  );
+  if (screen === 10) return (
+    <PackRound round={3} leftKey={packR2} rightKey="D"
+      onChoose={() => go(11)}
+      goBack={back} onExit={onExit} />
+  );
+
+  if (screen === 11) return <PackReveal goCart={() => go(13)} goAR={() => go(12)} goBack={() => go(8)} onExit={onExit} />;
+  if (screen === 12) return <ARScreen goCart={() => go(13)} goBack={back} onExit={onExit} />;
+  if (screen === 13) return <CartPage goNext={() => go(14)} goBack={back} onExit={onExit} />;
+  if (screen === 14) return <CheckoutPage goNext={() => go(15)} goBack={back} onExit={onExit} />;
+  if (screen === 15) return <OrderConfirm onExit={onExit} />;
+
+  return null;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
