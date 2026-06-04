@@ -24,8 +24,8 @@ const TK = {
   paper:       '#FFFFFF',
   ink:         '#1C1C1A',
   inkMid:      '#888884',
-  inkLight:    '#BBBBB8',
-  accent:      '#7A9A7A',
+  inkLight:    '#767672',
+  accent:      '#5A7A5A',
   accentLight: '#D4E4D4',
   accentBg:    '#EFF5EF',
   border:      '#E4E0DA',
@@ -266,7 +266,9 @@ function QuizQ1({ sel, toggle, goBack, goNext, onExit }) {
             <div key={o.label} onClick={() => toggle(o.label)} style={{ background: TK.paper, overflow: 'hidden', cursor: 'pointer', border: on ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, boxShadow: on ? '0 4px 16px rgba(122,154,122,0.14)' : 'none', display: 'flex', flexDirection: 'column' }}>
               <div style={{ height: 96, position: 'relative', flexShrink: 0 }}>
                 <RoomPhoto width="100%" height={96} photo={o.photo} label={null} />
-                {on && <div style={{ position: 'absolute', top: 8, right: 8, width: 20, height: 20, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
+                <div style={{ position: 'absolute', top: 8, right: 8, width: 18, height: 18, background: on ? TK.accent : 'rgba(255,255,255,0.85)', border: on ? 'none' : '1.5px solid rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      {on && <span style={{ color: '#fff', fontSize: 11 }}>✓</span>}
+    </div>
               </div>
               <div style={{ padding: '12px 16px' }}>
                 <div style={{ fontFamily: TK.sans, fontSize: 14, fontWeight: 500, color: TK.ink }}>{o.label}</div>
@@ -327,7 +329,9 @@ function QuizQ3({ sel, toggle, goBack, goNext, onExit }) {
               <div style={{ padding: '16px 24px', flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
                   <div style={{ fontFamily: TK.sans, fontSize: 15, fontWeight: 500, color: TK.ink }}>{o.label}</div>
-                  {on && <div style={{ width: 18, height: 18, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><span style={{ color: '#fff', fontSize: 10 }}>✓</span></div>}
+                  <div style={{ width: 18, height: 18, background: on ? TK.accent : 'transparent', border: on ? 'none' : `1.5px solid ${TK.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    {on && <span style={{ color: '#fff', fontSize: 11 }}>✓</span>}
+                  </div>
                 </div>
                 <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, marginBottom: 8 }}>{o.desc}</div>
                 <div style={{ display: 'flex', gap: 8 }}>
@@ -851,12 +855,12 @@ function App() {
   const back = () => setHistory(h => h.length > 1 ? h.slice(0, -1) : h);
 
   // Quiz state — all blank by default
-  const [q1, setQ1] = React.useState(() => new Set());
-  const [q2, setQ2] = React.useState(null);
-  const [q3, setQ3] = React.useState(() => new Set());
-  const [q4, setQ4] = React.useState(null);
-  const [q5, setQ5] = React.useState(() => new Set());
-  const [q6, setQ6] = React.useState(null);
+  const [q1, setQ1] = React.useState(() => new Set(['Warm & cozy', 'Natural & organic']));
+  const [q2, setQ2] = React.useState('Warm & earthy');
+  const [q3, setQ3] = React.useState(() => new Set(['Natural & raw']));
+  const [q4, setQ4] = React.useState('Warm & enveloping');
+  const [q5, setQ5] = React.useState(() => new Set(['Warm', 'Cozy', 'Natural', 'Inviting', 'Lived-in']));
+  const [q6, setQ6] = React.useState('A cohesive look');
 
   // Pack tournament state
   const [packR1, setPackR1] = React.useState('A');
