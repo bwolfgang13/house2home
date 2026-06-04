@@ -114,7 +114,7 @@ function RoomPhoto({ width, height, photo, label, style: sx = {} }) {
     : 'linear-gradient(160deg,#E4EDE0,#CDD8C8)';
   return (
     <div style={{ width, height, background: bg, backgroundColor: '#E4EDE0', position: 'relative', overflow: 'hidden', flexShrink: 0, ...sx }}>
-      {label && <div style={{ position: 'absolute', bottom: 10, left: 10, fontFamily: TK.sans, fontSize: 10, color: '#fff', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '5px 10px', background: 'rgba(28,28,26,0.55)', backdropFilter: 'blur(6px)' }}>{label}</div>}
+      {label && <div style={{ position: 'absolute', bottom: 10, left: 10, fontFamily: TK.sans, fontSize: 11, color: '#fff', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '5px 10px', background: 'rgba(28,28,26,0.55)', backdropFilter: 'blur(6px)' }}>{label}</div>}
     </div>
   );
 }
@@ -153,10 +153,10 @@ const PACKS = {
 // ─── Placeholder page ────────────────────────────────────────────────────────
 function PlaceholderPage({ title, goBack }) {
   return (
-    <Screen w={1280} h={720}>
-      <div style={{ width: 1280, height: 720, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+    <Screen w={1280} h={800}>
+      <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
         <NavBar onExit={goBack} />
-        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 652, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
           <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 500 }}>{title}</div>
           <h2 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 52, color: TK.ink, lineHeight: 1.1 }}>Under construction.</h2>
           <p style={{ fontFamily: TK.sans, fontSize: 15, color: TK.inkMid, fontWeight: 300, maxWidth: 400, textAlign: 'center', lineHeight: 1.7 }}>This page is coming soon. Check back after the sprint.</p>
@@ -214,7 +214,7 @@ function Landing({ go, goQuiz, goHowItWorks, goAbout }) {
           <div style={{ position: 'absolute', top: 0, right: 0, width: 56, height: 56, background: TK.accentLight }} />
           <div style={{ position: 'absolute', bottom: 32, left: -24, background: TK.bg, padding: '18px 22px', width: 240, borderLeft: `2.5px solid ${TK.accent}`, boxShadow: '0 4px 24px rgba(28,28,26,0.08)' }}>
             <div style={{ fontFamily: TK.serif, fontSize: 16, fontWeight: 400, color: TK.ink, marginBottom: 4 }}>Modern Warm</div>
-            <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight }}>3 items · est. $79</div>
+            <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight }}>3 items · est. $85</div>
           </div>
         </div>
       </div>
@@ -225,11 +225,11 @@ function Landing({ go, goQuiz, goHowItWorks, goAbout }) {
 // ─── Quiz shell ─────────────────────────────────────────────────────────────
 function QuizShell({ step, total, question, sub, children, goBack, goNext, nextLabel = 'Next →', hint, onExit }) {
   return (
-    <Screen w={1280} h={760}>
-      <div style={{ width: 1280, height: 760, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+    <Screen w={1280} h={800}>
+      <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
         <NavBar step={`Question ${step} of ${total}`} onExit={onExit} />
         <ProgressBar current={step} total={total} />
-        <div style={{ position: 'absolute', top: 70, left: 0, width: 1280, height: 690, display: 'flex', flexDirection: 'column', padding: '36px 64px 28px' }}>
+        <div style={{ position: 'absolute', top: 70, left: 0, width: 1280, height: 730, display: 'flex', flexDirection: 'column', padding: '36px 64px 28px' }}>
           <h2 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 38, color: TK.ink, lineHeight: 1.1, marginBottom: 6 }}>{question}</h2>
           {sub && <p style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkLight, marginBottom: 28, marginTop: 6 }}>{sub}</p>}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>{children}</div>
@@ -403,15 +403,12 @@ function QuizQ6({ sel, setSel, goBack, goNext, onExit }) {
         {opts.map((o) => {
           const on = sel === o.label;
           return (
-            <div key={o.label} onClick={() => setSel(o.label)} style={{ background: on ? TK.accentBg : TK.paper, cursor: 'pointer', border: on ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, padding: '24px 28px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                  <div style={{ fontFamily: TK.serif, fontSize: 22, fontWeight: 300, color: TK.ink, lineHeight: 1.1 }}>{o.label}</div>
-                  {on && <div style={{ width: 20, height: 20, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: 12 }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
-                </div>
-                <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, lineHeight: 1.6 }}>{o.desc}</div>
+            <div key={o.label} onClick={() => setSel(o.label)} style={{ background: on ? TK.accentBg : TK.paper, cursor: 'pointer', border: on ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, padding: '24px 28px', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+                <div style={{ fontFamily: TK.serif, fontSize: 22, fontWeight: 300, color: TK.ink, lineHeight: 1.1 }}>{o.label}</div>
+                {on && <div style={{ width: 20, height: 20, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: 12 }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
               </div>
-              <div style={{ marginTop: 20, width: '100%', height: 60, background: on ? 'rgba(122,154,122,0.12)' : TK.borderLight }} />
+              <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, lineHeight: 1.6 }}>{o.desc}</div>
             </div>
           );
         })}
@@ -423,10 +420,10 @@ function QuizQ6({ sel, setSel, goBack, goNext, onExit }) {
 // ─── Style Result ───────────────────────────────────────────────────────────
 function StyleResult({ go, goBack, onExit }) {
   return (
-    <Screen w={1280} h={720}>
-      <div style={{ width: 1280, height: 720, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+    <Screen w={1280} h={800}>
+      <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
         <NavBar onExit={onExit} />
-        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 652, display: 'flex' }}>
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex' }}>
           <div style={{ width: '46%', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 56px 0 64px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
               <div style={{ width: 18, height: 1, background: TK.accent }} />
@@ -461,7 +458,7 @@ function PackRound({ round, leftKey, rightKey, onChoose, goBack, onExit }) {
     return (
       <div onClick={() => onChoose(packKey)} style={{ flex: 1, background: TK.paper, display: 'flex', flexDirection: 'column', border: advancing ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, boxShadow: advancing ? '0 4px 24px rgba(122,154,122,0.13)' : '0 2px 8px rgba(28,28,26,0.04)', cursor: 'pointer', overflow: 'hidden' }}>
         <div style={{ padding: '14px 20px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'inline-flex', padding: '3px 10px', background: advancing ? TK.accentBg : '#EEF2F7', fontFamily: TK.sans, fontSize: 10, fontWeight: 500, color: advancing ? TK.accent : '#6A7F9A', letterSpacing: '0.07em', textTransform: 'uppercase' }}>
+          <div style={{ display: 'inline-flex', padding: '3px 10px', background: advancing ? TK.accentBg : TK.borderLight, fontFamily: TK.sans, fontSize: 11, fontWeight: 500, color: advancing ? TK.accent : TK.inkMid, letterSpacing: '0.07em', textTransform: 'uppercase' }}>
             {advancing ? '↑ Your pick' : 'Challenger'}
           </div>
           <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight }}>Pack {packKey}</div>
@@ -483,10 +480,10 @@ function PackRound({ round, leftKey, rightKey, onChoose, goBack, onExit }) {
   }
 
   return (
-    <Screen w={1280} h={820}>
-      <div style={{ width: 1280, height: 820, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+    <Screen w={1280} h={800}>
+      <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
         <NavBar step="Pick your pack" onExit={onExit} />
-        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 752, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px 56px 24px' }}>
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px 56px 24px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginBottom: 22 }}>
             <div style={{ display: 'flex', gap: 6 }}>
               {[1,2,3].map(i => <div key={i} style={{ height: 5, borderRadius: 2.5, width: i === round ? 22 : 5, background: i <= round ? TK.accent : TK.border }} />)}
@@ -540,7 +537,7 @@ function PackReveal({ goCart, goAR, goBack, onExit }) {
                 <div key={item.cat} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: TK.paper, border: `0.5px solid ${TK.border}` }}>
                   <Thumb size={40} photo={itemPhotos[item.cat]} />
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontFamily: TK.sans, fontSize: 10, color: TK.inkLight }}>{item.cat}</div>
+                    <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight }}>{item.cat}</div>
                     <div style={{ fontFamily: TK.sans, fontSize: 13, fontWeight: 500, color: TK.ink }}>{item.name}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
@@ -568,7 +565,7 @@ function PackReveal({ goCart, goAR, goBack, onExit }) {
             <RoomPhoto width="100%" height={732} photo="packAll" label="All 3 items styled in your space" />
             <div style={{ position: 'absolute', top: 0, right: 0, width: 52, height: 52, background: TK.accentLight }} />
             {[{ label: 'Print', top: '18%', left: '12%' }, { label: 'Light', top: '55%', left: '54%' }, { label: 'Accessory', top: '74%', left: '16%' }].map(({ label, top, left }) => (
-              <div key={label} style={{ position: 'absolute', top, left, background: 'rgba(250,250,248,0.9)', border: `0.5px solid ${TK.border}`, padding: '4px 11px', fontFamily: TK.sans, fontSize: 10, color: TK.ink, letterSpacing: '0.07em', textTransform: 'uppercase' }}>{label}</div>
+              <div key={label} style={{ position: 'absolute', top, left, background: 'rgba(250,250,248,0.9)', border: `0.5px solid ${TK.border}`, padding: '4px 11px', fontFamily: TK.sans, fontSize: 11, color: TK.ink, letterSpacing: '0.07em', textTransform: 'uppercase' }}>{label}</div>
             ))}
           </div>
         </div>
@@ -580,10 +577,10 @@ function PackReveal({ goCart, goAR, goBack, onExit }) {
 // ─── AR Placeholder ──────────────────────────────────────────────────────────
 function ARScreen({ goCart, goBack, onExit }) {
   return (
-    <Screen w={1280} h={720}>
-      <div style={{ width: 1280, height: 720, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+    <Screen w={1280} h={800}>
+      <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
         <NavBar step="Try in your room" onExit={onExit} />
-        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 652, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 64px' }}>
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 64px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
             <div style={{ width: 18, height: 1, background: TK.accent }} />
             <span style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>See it before you buy</span>
@@ -628,10 +625,10 @@ function CartPage({ goNext, goBack, onExit }) {
   ];
   const subtotal = items.reduce((s, i) => s + i.price, 0);
   return (
-    <Screen w={1280} h={820}>
-      <div style={{ width: 1280, height: 820, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+    <Screen w={1280} h={800}>
+      <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
         <NavBar step="Your cart" onExit={onExit} />
-        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 752, display: 'flex' }}>
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex' }}>
           <div style={{ flex: 1, padding: '36px 40px 36px 64px', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
             <div style={{ marginBottom: 32 }}>
               <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 14 }}>Your starter pack</div>
@@ -647,7 +644,7 @@ function CartPage({ goNext, goBack, onExit }) {
                       <div key={item.cat} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                         <Thumb size={36} photo={item.photo} />
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontFamily: TK.sans, fontSize: 10, color: TK.inkLight }}>{item.cat}</div>
+                          <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight }}>{item.cat}</div>
                           <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.ink }}>{item.name}</div>
                           <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkMid }}>{item.sub}</div>
                         </div>
@@ -665,11 +662,11 @@ function CartPage({ goNext, goBack, onExit }) {
                   <div key={a.name} style={{ background: TK.paper, border: `0.5px solid ${TK.border}`, cursor: 'pointer', overflow: 'hidden' }}>
                     <RoomPhoto width="100%" height={96} photo={a.photo} label={null} />
                     <div style={{ padding: '10px 12px' }}>
-                      <div style={{ fontFamily: TK.sans, fontSize: 10, color: TK.inkLight, marginBottom: 2 }}>{a.cat}</div>
+                      <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, marginBottom: 2 }}>{a.cat}</div>
                       <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.ink, marginBottom: 6 }}>{a.name}</div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid }}>${a.price}</div>
-                        <div style={{ fontFamily: TK.sans, fontSize: 10, color: TK.accent, letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>+ Add</div>
+                        <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>+ Add</div>
                       </div>
                     </div>
                   </div>
@@ -731,10 +728,10 @@ function CheckoutPage({ goNext, goBack, onExit }) {
   }
 
   return (
-    <Screen w={1280} h={860}>
-      <div style={{ width: 1280, height: 860, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+    <Screen w={1280} h={800}>
+      <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
         <NavBar step="Checkout" onExit={onExit} />
-        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 792, display: 'flex' }}>
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex' }}>
           <div style={{ flex: 1, padding: '36px 48px 36px 64px', overflowY: 'auto' }}>
             <Section title="Contact"><Field label="Email address" placeholder="your@email.com" /></Section>
             <Section title="Shipping address">
@@ -786,6 +783,10 @@ function CheckoutPage({ goNext, goBack, onExit }) {
 
 // ─── Order Confirmation ──────────────────────────────────────────────────────
 function OrderConfirm({ onExit }) {
+  const d1 = new Date(); d1.setDate(d1.getDate() + 7);
+  const d2 = new Date(); d2.setDate(d2.getDate() + 9);
+  const fmt = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const deliveryRange = `${fmt(d1)}–${fmt(d2)}`;
   const items = [
     { cat: 'Print',     name: 'Line Art Figure Study',  price: 24, photo: 'print' },
     { cat: 'Light',     name: 'Slim Column Table Lamp', price: 44, photo: 'light' },
@@ -793,17 +794,17 @@ function OrderConfirm({ onExit }) {
   ];
   const total = items.reduce((s, i) => s + i.price, 0) + 6.50;
   return (
-    <Screen w={1280} h={720}>
-      <div style={{ width: 1280, height: 720, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+    <Screen w={1280} h={800}>
+      <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
         <NavBar onExit={onExit} />
-        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 652, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 64px' }}>
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 64px' }}>
           <div style={{ textAlign: 'center', marginBottom: 36 }}>
             <div style={{ width: 48, height: 48, borderRadius: '50%', background: TK.accentBg, border: `1.5px solid ${TK.accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
               <span style={{ color: TK.accent, fontSize: 20 }}>✓</span>
             </div>
             <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>Order confirmed</div>
             <h1 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 50, color: TK.ink, marginBottom: 8, lineHeight: 1.05 }}>You're all set.</h1>
-            <p style={{ fontFamily: TK.sans, fontSize: 15, color: TK.inkMid, fontWeight: 300, maxWidth: 480, margin: '0 auto', lineHeight: 1.65 }}>Your Modern Warm starter pack is on its way. You made great choices — trust your taste.</p>
+            <p style={{ fontFamily: TK.sans, fontSize: 15, color: TK.inkMid, fontWeight: 300, maxWidth: 480, margin: '0 auto', lineHeight: 1.65 }}>The Soft Studio is on its way. You made great choices — trust your taste.</p>
           </div>
           <div style={{ background: TK.paper, border: `0.5px solid ${TK.border}`, width: '100%', maxWidth: 780, display: 'flex', overflow: 'hidden' }}>
             <RoomPhoto width={220} height={220} photo="studio" label="The Soft Studio" />
@@ -811,14 +812,14 @@ function OrderConfirm({ onExit }) {
               <div style={{ fontFamily: TK.serif, fontSize: 22, fontWeight: 400, color: TK.ink, marginBottom: 4 }}>The Soft Studio</div>
               <div style={{ display: 'flex', gap: 20, marginBottom: 14 }}>
                 <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid }}>Order #H2H-00482</div>
-                <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid }}>Est. delivery May 6–8</div>
+                <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid }}>Est. delivery {deliveryRange}</div>
               </div>
               <div style={{ display: 'flex', gap: 16 }}>
                 {items.map(item => (
                   <div key={item.cat} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <Thumb size={32} photo={item.photo} />
                     <div>
-                      <div style={{ fontFamily: TK.sans, fontSize: 10, color: TK.inkLight }}>{item.cat}</div>
+                      <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight }}>{item.cat}</div>
                       <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.ink }}>{item.name}</div>
                     </div>
                   </div>
