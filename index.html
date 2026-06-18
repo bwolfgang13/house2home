@@ -415,10 +415,10 @@ function QuizQ5({ sel, toggle, goBack, goNext, onExit }) {
 // ─── Quiz Q6 ────────────────────────────────────────────────────────────────
 function QuizQ6({ sel, setSel, goBack, goNext, onExit }) {
   const opts = [
-    { label: 'The right light',       desc: 'Lighting changes everything. I want a piece that sets the mood.' },
-    { label: 'A statement print',     desc: 'One piece of art that gives the wall a reason to exist.' },
-    { label: 'A standout accessory',  desc: 'Something on the shelf or table that makes you stop and look.' },
-    { label: 'A cohesive look',       desc: "I don't know where to start — I want it all to work together." },
+    { label: 'The right light',       desc: 'Lighting changes everything. I want a piece that sets the mood.',     photo: 'light' },
+    { label: 'A statement print',     desc: 'One piece of art that gives the wall a reason to exist.',             photo: 'print' },
+    { label: 'A standout accessory',  desc: 'Something on the shelf or table that makes you stop and look.',       photo: 'accessory' },
+    { label: 'A cohesive look',       desc: "I don't know where to start — I want it all to work together.",       photo: 'modernWarm' },
   ];
   return (
     <QuizShell step={6} total={6} question="What would make the biggest difference in your space right now?" sub="Choose one" goBack={goBack} goNext={goNext} nextLabel="See my style →" onExit={onExit}>
@@ -426,12 +426,15 @@ function QuizQ6({ sel, setSel, goBack, goNext, onExit }) {
         {opts.map((o) => {
           const on = sel === o.label;
           return (
-            <div key={o.label} onClick={() => setSel(o.label)} style={{ background: on ? TK.accentBg : TK.paper, cursor: 'pointer', border: on ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, padding: '24px 28px', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                <div style={{ fontFamily: TK.serif, fontSize: 22, fontWeight: 300, color: TK.ink, lineHeight: 1.1 }}>{o.label}</div>
-                {on && <div style={{ width: 20, height: 20, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: 12 }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
+            <div key={o.label} onClick={() => setSel(o.label)} style={{ background: on ? TK.accentBg : TK.paper, cursor: 'pointer', border: on ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <RoomPhoto width="100%" height={80} photo={o.photo} label={null} />
+              <div style={{ padding: '14px 20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                  <div style={{ fontFamily: TK.serif, fontSize: 20, fontWeight: 300, color: TK.ink, lineHeight: 1.1 }}>{o.label}</div>
+                  {on && <div style={{ width: 20, height: 20, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: 12 }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
+                </div>
+                <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, lineHeight: 1.6 }}>{o.desc}</div>
               </div>
-              <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, lineHeight: 1.6 }}>{o.desc}</div>
             </div>
           );
         })}
