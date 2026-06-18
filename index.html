@@ -62,6 +62,7 @@ const PHOTOS = {
   print:         '1513519245088-0e12902e5a38',
   light:         '1513506003901-1e6a229e2d15',
   accessory:     '1565193566173-7a0ee3dbe261',
+  arRoom:        '1616594039964-ae9021a400a0',
 };
 
 function photoUrl(key, w = 800, h = 600) {
@@ -610,39 +611,251 @@ function PackReveal({ goCart, goAR, goBack, onExit }) {
   );
 }
 
-// ─── AR Placeholder ──────────────────────────────────────────────────────────
-function ARScreen({ goCart, goBack, onExit }) {
+// ─── AR Tips Modal ────────────────────────────────────────────────────────────
+function ARTipsModal({ onClose }) {
   return (
-    <Screen w={1280} h={800}>
-      <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
-        <NavBar step="Try in your room" onExit={onExit} />
-        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 64px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-            <div style={{ width: 18, height: 1, background: TK.accent }} />
-            <span style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>See it before you buy</span>
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(28,28,26,0.55)', zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div onClick={e => e.stopPropagation()} style={{ background: TK.bg, width: 660, maxHeight: 580, overflowY: 'auto', padding: '44px 52px', position: 'relative' }}>
+        <div onClick={onClose} style={{ position: 'absolute', top: 20, right: 24, fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, cursor: 'pointer', letterSpacing: '0.07em', textTransform: 'uppercase' }}>Close</div>
+        <div style={{ marginBottom: 22 }}>
+          <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6, fontWeight: 500 }}>Photo guidance</div>
+          <h2 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 28, color: TK.ink }}>Getting the best result</h2>
+        </div>
+        <div style={{ display: 'flex', gap: 14, marginBottom: 26 }}>
+          <div style={{ flex: 1 }}>
+            <RoomPhoto width="100%" height={130} photo="minimal" label={null} />
+            <div style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 8, fontWeight: 500 }}>Good angle</div>
+            <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid, marginTop: 3 }}>Straight-on, shows full wall surface</div>
           </div>
-          <h2 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 44, color: TK.ink, marginBottom: 10, textAlign: 'center' }}>Try in Your Room</h2>
-          <p style={{ fontFamily: TK.sans, fontSize: 15, color: TK.inkMid, marginBottom: 40, textAlign: 'center', fontWeight: 300, maxWidth: 480, lineHeight: 1.65 }}>Upload a photo of your space and see exactly how your pack will look before you commit.</p>
-          <div style={{ width: '100%', maxWidth: 720, border: `1px dashed ${TK.border}`, padding: '56px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, background: TK.paper }}>
-            <div style={{ width: 48, height: 48, borderRadius: '50%', background: TK.accentBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ width: 20, height: 20, border: `1.5px solid ${TK.accent}`, borderRadius: 2 }} />
+          <div style={{ flex: 1 }}>
+            <RoomPhoto width="100%" height={130} photo="eclectic" label={null} />
+            <div style={{ fontFamily: TK.sans, fontSize: 11, color: '#B87070', letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 8, fontWeight: 500 }}>Avoid</div>
+            <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid, marginTop: 3 }}>Diagonal angle or cluttered surfaces</div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {[
+            { label: 'Angle',   body: 'Face the wall or corner straight-on. Diagonal shots make it hard to place items accurately. Stand back far enough to show at least one full wall and a portion of the floor.' },
+            { label: 'Lighting', body: 'Natural daylight works best. Avoid harsh flash or backlighting. If shooting at night, turn on as many lights as possible — shadows make placement harder to read.' },
+            { label: 'Framing', body: 'Include the floor and at least one wall edge in the frame. Landscape orientation gives us more to work with than portrait.' },
+          ].map(({ label, body }) => (
+            <div key={label} style={{ borderTop: `0.5px solid ${TK.borderLight}`, paddingTop: 16, paddingBottom: 16 }}>
+              <div style={{ fontFamily: TK.sans, fontSize: 11, fontWeight: 500, color: TK.ink, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6 }}>{label}</div>
+              <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, lineHeight: 1.7, fontWeight: 300 }}>{body}</div>
             </div>
-            <div style={{ fontFamily: TK.serif, fontSize: 20, fontWeight: 300, color: TK.ink }}>Upload a photo of your space</div>
-            <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid }}>JPG or PNG · up to 10MB</div>
-            <Btn label="Choose photo" variant="outline" size="sm" />
-          </div>
-          <div style={{ marginTop: 20, display: 'flex', gap: 24, alignItems: 'center' }}>
-            <div style={{ height: '0.5px', width: 120, background: TK.border }} />
-            <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight }}>or skip for now</div>
-            <div style={{ height: '0.5px', width: 120, background: TK.border }} />
-          </div>
-          <div style={{ marginTop: 16 }}>
-            <Btn label="Continue to cart →" onClick={goCart} />
+          ))}
+          <div style={{ borderTop: `0.5px solid ${TK.borderLight}`, paddingTop: 14, fontFamily: TK.sans, fontSize: 12, color: TK.inkLight, lineHeight: 1.6, fontStyle: 'italic' }}>
+            On a phone, you can take a photo directly — hold the camera parallel to the wall for best results.
           </div>
         </div>
       </div>
-    </Screen>
+    </div>
   );
+}
+
+// ─── AR Screen ────────────────────────────────────────────────────────────────
+function ARScreen({ goCart, goBack, onExit }) {
+  const [view, setView] = React.useState('upload');
+  const [showTips, setShowTips] = React.useState(false);
+  const [copied, setCopied] = React.useState(false);
+  const [expanded, setExpanded] = React.useState({});
+  const [pulseOn, setPulseOn] = React.useState(true);
+
+  React.useEffect(() => {
+    if (view !== 'loading') return;
+    const iv = setInterval(() => setPulseOn(p => !p), 700);
+    return () => clearInterval(iv);
+  }, [view]);
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setView('loading');
+      setTimeout(() => setView('result'), 1500);
+    }
+  };
+
+  const handleShare = () => {
+    navigator.clipboard.writeText("Here's how The Soft Studio looks in my space — https://bwolfgang13.github.io/house2home/").then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  const placements = [
+    { cat: 'Print',     short: 'On the wall, above eye level', full: 'Hang centered above a sofa or console, at least 60" from the floor. Leave 6–8" of wall above and beside the frame.' },
+    { cat: 'Light',     short: 'On a side table or floor',     full: 'Position beside a chair or sofa end. Floor placement works best 12–18" from the wall. Keep the shade at seated eye level.' },
+    { cat: 'Accessory', short: 'On a surface at arm\'s reach', full: 'Place on a coffee table, nightstand, or low shelf. Works best grouped with one taller and one lower object nearby.' },
+  ];
+
+  const toggleExpanded = (cat) => setExpanded(e => ({ ...e, [cat]: !e[cat] }));
+
+  if (view === 'upload') {
+    const inlineTips = ['Straight-on angle', 'Natural daylight', 'Full wall or corner in frame', 'Landscape works best'];
+    return (
+      <>
+        <Screen w={1280} h={800}>
+          <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+            <NavBar step="Try in your room" onExit={onExit} />
+            <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '28px 64px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                <div style={{ width: 18, height: 1, background: TK.accent }} />
+                <span style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>See it before you buy</span>
+              </div>
+              <h2 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 42, color: TK.ink, marginBottom: 8, textAlign: 'center' }}>Try in Your Room</h2>
+              <p style={{ fontFamily: TK.sans, fontSize: 14, color: TK.inkMid, marginBottom: 18, textAlign: 'center', fontWeight: 300, maxWidth: 480, lineHeight: 1.65 }}>Upload a photo of your space and see your starter pack placed in it before you commit.</p>
+              <div style={{ display: 'flex', gap: 8, marginBottom: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+                {inlineTips.map(t => (
+                  <div key={t} style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, padding: '5px 12px', border: `0.5px solid ${TK.border}`, background: TK.paper }}>{t}</div>
+                ))}
+              </div>
+              <div onClick={() => setShowTips(true)} style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, cursor: 'pointer', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 22, textDecoration: 'underline' }}>Learn more</div>
+              <div style={{ width: '100%', maxWidth: 680, border: `1px dashed ${TK.border}`, padding: '36px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, background: TK.paper }}>
+                <div style={{ width: 44, height: 44, borderRadius: '50%', background: TK.accentBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: 18, height: 18, border: `1.5px solid ${TK.accent}`, borderRadius: 2 }} />
+                </div>
+                <div style={{ fontFamily: TK.serif, fontSize: 18, fontWeight: 300, color: TK.ink }}>Upload a photo of your space</div>
+                <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid }}>JPG or PNG · up to 10MB</div>
+                <label style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: TK.sans, fontWeight: 500, letterSpacing: '0.05em', cursor: 'pointer', padding: '8px 16px', fontSize: 12, background: 'transparent', color: TK.ink, border: `0.5px solid ${TK.border}` }}>
+                  Choose photo
+                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
+                </label>
+              </div>
+              <div style={{ marginTop: 22, textAlign: 'center' }}>
+                <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, marginBottom: 10, fontWeight: 300 }}>Not ready to upload? No problem — see it in a styled room instead.</div>
+                <Btn label="See it in a styled room →" variant="ghost" onClick={() => setView('fallback')} />
+              </div>
+            </div>
+          </div>
+        </Screen>
+        {showTips && ReactDOM.createPortal(<ARTipsModal onClose={() => setShowTips(false)} />, document.body)}
+      </>
+    );
+  }
+
+  if (view === 'loading') {
+    return (
+      <Screen w={1280} h={800}>
+        <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+          <NavBar step="Try in your room" onExit={onExit} />
+          <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+            <div style={{ width: 40, height: 40, background: TK.accent, opacity: pulseOn ? 1 : 0.25, transition: 'opacity 0.7s' }} />
+            <div style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 28, color: TK.ink }}>Analyzing your space…</div>
+            <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, fontWeight: 300 }}>This usually takes just a moment.</div>
+          </div>
+        </div>
+      </Screen>
+    );
+  }
+
+  if (view === 'result' || view === 'fallback') {
+    const isResult = view === 'result';
+    const roomPhoto = isResult ? 'arRoom' : 'earthy';
+    const eyebrow = isResult ? 'Your room, styled' : 'A similar space, styled';
+    const subNote = isResult ? null : "Here's how your pack looks in a room with a similar feel.";
+    const resultCallouts = [
+      { label: 'Print',     top: '32%', left: '10%' },
+      { label: 'Light',     top: '51%', left: '65%' },
+      { label: 'Accessory', top: '58%', left: '5%'  },
+    ];
+    const fallbackCallouts = [
+      { label: 'Print',     top: '29%', left: '67%' },
+      { label: 'Light',     top: '58%', left: '14%' },
+      { label: 'Accessory', top: '53%', left: '73%' },
+    ];
+    const callouts = isResult ? resultCallouts : fallbackCallouts;
+    return (
+      <Screen w={1280} h={800}>
+        <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+          <NavBar step="Try in your room" onExit={onExit} />
+          <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex' }}>
+            <div style={{ width: 500, padding: '36px 40px 36px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                <div style={{ width: 18, height: 1, background: TK.accent }} />
+                <span style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>{eyebrow}</span>
+              </div>
+              <h2 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 34, color: TK.ink, lineHeight: 1.1, marginBottom: subNote ? 8 : 16 }}>The Soft Studio</h2>
+              {subNote && <p style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, marginBottom: 16, fontWeight: 300, lineHeight: 1.6 }}>{subNote}</p>}
+              <div style={{ fontFamily: TK.sans, fontSize: 10, color: TK.inkLight, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Placement guide</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 1, marginBottom: 20 }}>
+                {placements.map(({ cat, short, full }) => (
+                  <div key={cat} onClick={() => toggleExpanded(cat)} style={{ background: TK.paper, border: `0.5px solid ${TK.border}`, padding: '10px 14px', cursor: 'pointer' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                        <span style={{ fontFamily: TK.sans, fontSize: 10, color: TK.inkLight, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{cat}</span>
+                        <span style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid }}>{short}</span>
+                      </div>
+                      <span style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkLight, flexShrink: 0 }}>{expanded[cat] ? '−' : '+'}</span>
+                    </div>
+                    {expanded[cat] && (
+                      <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid, lineHeight: 1.65, marginTop: 8, paddingTop: 8, borderTop: `0.5px solid ${TK.borderLight}`, fontWeight: 300 }}>{full}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <Btn label="Continue to cart →" variant="primary" size="lg" onClick={goCart} style={{ marginBottom: 10 }} />
+              <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+                <span onClick={handleShare} style={{ fontFamily: TK.sans, fontSize: 12, color: copied ? TK.accent : TK.inkLight, cursor: 'pointer', textDecoration: 'underline' }}>{copied ? 'Copied!' : 'Share this room'}</span>
+                <span style={{ fontFamily: TK.sans, fontSize: 12, color: TK.border }}>·</span>
+                {isResult
+                  ? <span onClick={() => setView('retake')} style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight, cursor: 'pointer', textDecoration: 'underline' }}>This doesn't look right</span>
+                  : <span onClick={() => setView('upload')} style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight, cursor: 'pointer', textDecoration: 'underline' }}>← Try uploading instead</span>
+                }
+              </div>
+            </div>
+            <div style={{ flex: 1, position: 'relative' }}>
+              <RoomPhoto width="100%" height={732} photo={roomPhoto} label={null} />
+              <div style={{ position: 'absolute', top: 0, right: 0, width: 52, height: 52, background: TK.accentLight }} />
+              {callouts.map(({ label, top, left }) => (
+                <div key={label} style={{ position: 'absolute', top, left, background: 'rgba(250,250,248,0.9)', border: `0.5px solid ${TK.border}`, padding: '4px 11px', fontFamily: TK.sans, fontSize: 11, color: TK.ink, letterSpacing: '0.07em', textTransform: 'uppercase' }}>{label}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Screen>
+    );
+  }
+
+  if (view === 'retake') {
+    const retakeTips = [
+      { label: 'Angle', tip: 'Straight-on, not diagonal' },
+      { label: 'Light', tip: 'Natural daylight, no harsh flash' },
+      { label: 'Frame', tip: 'Show at least one full wall and a floor surface' },
+    ];
+    return (
+      <Screen w={1280} h={800}>
+        <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+          <NavBar step="Try in your room" onExit={onExit} />
+          <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 64px' }}>
+            <div style={{ maxWidth: 540, width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                <div style={{ width: 18, height: 1, background: TK.accent }} />
+                <span style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>Let's try again</span>
+              </div>
+              <h2 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 38, color: TK.ink, marginBottom: 14, lineHeight: 1.1 }}>The photo didn't give us enough to work with.</h2>
+              <p style={{ fontFamily: TK.sans, fontSize: 14, color: TK.inkMid, marginBottom: 24, lineHeight: 1.7, fontWeight: 300 }}>For best results, try a straight-on shot of your wall or corner in natural daylight. Avoid mirrors, strong shadows, or very cluttered surfaces.</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 1, marginBottom: 28 }}>
+                {retakeTips.map(({ label, tip }) => (
+                  <div key={label} style={{ background: TK.paper, border: `0.5px solid ${TK.border}`, padding: '12px 16px', display: 'flex', gap: 16, alignItems: 'center' }}>
+                    <div style={{ fontFamily: TK.sans, fontSize: 10, color: TK.inkLight, letterSpacing: '0.1em', textTransform: 'uppercase', width: 48, flexShrink: 0 }}>{label}</div>
+                    <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid }}>{tip}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: 12 }}>
+                <label style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: TK.sans, fontWeight: 500, letterSpacing: '0.05em', cursor: 'pointer', padding: '11px 24px', fontSize: 13, background: TK.accent, color: '#fff' }}>
+                  Upload a new photo
+                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
+                </label>
+                <Btn label="See it in a styled room instead" variant="outline" onClick={() => setView('fallback')} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </Screen>
+    );
+  }
+
+  return null;
 }
 
 // ─── Cart ────────────────────────────────────────────────────────────────────
@@ -955,13 +1168,12 @@ function App() {
   const go = (n) => setHistory(h => [...h, n]);
   const back = () => setHistory(h => h.length > 1 ? h.slice(0, -1) : h);
 
-  // Quiz state — pre-seeded for Modern Warm demo
-  const [q1, setQ1] = React.useState(() => new Set(['Warm & cozy', 'Natural & organic']));
-  const [q2, setQ2] = React.useState('Warm & earthy');
-  const [q3, setQ3] = React.useState(() => new Set(['Natural & raw']));
-  const [q4, setQ4] = React.useState('Warm & enveloping');
-  const [q5, setQ5] = React.useState(() => new Set(['Warm', 'Cozy', 'Natural', 'Inviting', 'Lived-in']));
-  const [q6, setQ6] = React.useState('A cohesive look');
+  const [q1, setQ1] = React.useState(() => new Set());
+  const [q2, setQ2] = React.useState(null);
+  const [q3, setQ3] = React.useState(() => new Set());
+  const [q4, setQ4] = React.useState(null);
+  const [q5, setQ5] = React.useState(() => new Set());
+  const [q6, setQ6] = React.useState(null);
 
   // Pack tournament state
   const [packR1, setPackR1] = React.useState('A');
