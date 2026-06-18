@@ -427,7 +427,7 @@ function QuizQ6({ sel, setSel, goBack, goNext, onExit }) {
           const on = sel === o.label;
           return (
             <div key={o.label} onClick={() => setSel(o.label)} style={{ background: on ? TK.accentBg : TK.paper, cursor: 'pointer', border: on ? `1.5px solid ${TK.accent}` : `0.5px solid ${TK.border}`, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              <RoomPhoto width="100%" height={80} photo={o.photo} label={null} />
+              <RoomPhoto width="100%" height={160} photo={o.photo} label={null} />
               <div style={{ padding: '14px 20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
                   <div style={{ fontFamily: TK.serif, fontSize: 20, fontWeight: 300, color: TK.ink, lineHeight: 1.1 }}>{o.label}</div>
