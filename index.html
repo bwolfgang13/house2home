@@ -176,6 +176,47 @@ function PlaceholderPage({ title, goBack }) {
   );
 }
 
+// ─── Screen: Know Your Style? ───────────────────────────────────────────────
+function KnowYourStyle({ goYes, goNo, onExit }) {
+  const openHelp = React.useContext(HelpContext);
+  return (
+    <Screen w={1280} h={800}>
+      <div style={{ width: 1280, height: 800, background: TK.bg, fontFamily: TK.sans, position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 56px', borderBottom: `0.5px solid ${TK.border}`, background: TK.bg, zIndex: 10 }}>
+          <div style={{ fontFamily: TK.serif, fontSize: 17, fontWeight: 300, color: TK.ink, letterSpacing: '0.04em' }}>house<span style={{ color: TK.accent }}>2</span>home</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+            <div onClick={openHelp} style={{ fontFamily: TK.sans, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: TK.inkLight, cursor: 'pointer' }}>How it works</div>
+            <div onClick={onExit} style={{ fontFamily: TK.sans, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: TK.inkLight, cursor: 'pointer' }}>Save & exit</div>
+          </div>
+        </div>
+        <div style={{ position: 'absolute', top: 68, left: 0, width: 1280, height: 732, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 64px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+            <div style={{ width: 18, height: 1, background: TK.accent }} />
+            <span style={{ fontFamily: TK.sans, fontSize: 11, color: TK.accent, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>Getting started</span>
+          </div>
+          <h2 style={{ fontFamily: TK.serif, fontWeight: 300, fontSize: 46, color: TK.ink, marginBottom: 10, textAlign: 'center', lineHeight: 1.1 }}>Do you already know<br /><span style={{ fontStyle: 'italic' }}>your decorating style?</span></h2>
+          <p style={{ fontFamily: TK.sans, fontSize: 14, color: TK.inkMid, marginBottom: 44, textAlign: 'center', fontWeight: 300, lineHeight: 1.65, maxWidth: 460 }}>If you know your style, we'll jump straight to curating your pack. Otherwise, our 2-minute quiz will find it for you.</p>
+          <div style={{ display: 'flex', gap: 16, maxWidth: 680, width: '100%' }}>
+            <div onClick={goYes} style={{ flex: 1, background: TK.paper, border: `0.5px solid ${TK.border}`, padding: '30px 32px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ fontFamily: TK.serif, fontSize: 22, fontWeight: 300, color: TK.ink, lineHeight: 1.15 }}>Yes, I know my style</div>
+              <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, lineHeight: 1.6, fontWeight: 300 }}>Skip the quiz and go straight to picking your starter pack.</div>
+              <div style={{ marginTop: 10, fontFamily: TK.sans, fontSize: 12, color: TK.accent, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Browse packs →</div>
+            </div>
+            <div onClick={goNo} style={{ flex: 1, background: TK.accent, padding: '30px 32px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ fontFamily: TK.serif, fontSize: 22, fontWeight: 300, color: '#fff', lineHeight: 1.15 }}>No, help me find it</div>
+              <div style={{ fontFamily: TK.sans, fontSize: 13, color: 'rgba(255,255,255,0.75)', lineHeight: 1.6, fontWeight: 300 }}>6 quick questions to match you to your decorating style.</div>
+              <div style={{ marginTop: 10, fontFamily: TK.sans, fontSize: 12, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Take the quiz →</div>
+            </div>
+          </div>
+          <div style={{ marginTop: 28 }}>
+            <span onClick={onExit} style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight, cursor: 'pointer' }}>← Back to home</span>
+          </div>
+        </div>
+      </div>
+    </Screen>
+  );
+}
+
 // ─── Screen: Landing ────────────────────────────────────────────────────────
 function Landing({ go, goQuiz, goHowItWorks, goAbout }) {
   const navLinks = [
@@ -308,7 +349,7 @@ function QuizQ2({ sel, setSel, goBack, goNext, onExit }) {
               <div style={{ display: 'flex', height: 100, flexShrink: 0 }}>{p.colors.map((c, i) => <div key={i} style={{ flex: 1, background: c }} />)}</div>
               <div style={{ padding: '12px 18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ fontFamily: TK.sans, fontSize: 14, fontWeight: 500, color: TK.ink }}>{p.label}</div>
-                {on && <div style={{ width: 18, height: 18, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ color: '#fff', fontSize: 10 }}>✓</span></div>}
+                {on && <div style={{ width: 18, height: 18, background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ color: '#fff', fontSize: 10 }}>✓</span></div>}
               </div>
             </div>
           );
@@ -374,7 +415,7 @@ function QuizQ4({ sel, setSel, goBack, goNext, onExit }) {
                 <div style={{ padding: '16px 24px', flexShrink: 0 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                     <div style={{ fontFamily: TK.serif, fontSize: 20, fontWeight: 300, color: TK.ink }}>{o.label}</div>
-                    {on && <div style={{ width: 20, height: 20, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
+                    {on && <div style={{ width: 20, height: 20, background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
                   </div>
                   <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid, lineHeight: 1.55, fontStyle: 'italic' }}>{o.desc}</div>
                 </div>
@@ -387,7 +428,7 @@ function QuizQ4({ sel, setSel, goBack, goNext, onExit }) {
             <div style={{ fontFamily: TK.serif, fontSize: 20, fontWeight: 300, color: TK.ink }}>{third.label}</div>
             <div style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkMid, marginTop: 4, fontStyle: 'italic' }}>{third.desc}</div>
           </div>
-          {on3 && <div style={{ width: 20, height: 20, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: 20 }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
+          {on3 && <div style={{ width: 20, height: 20, background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: 20 }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
         </div>
       </div>
     </QuizShell>
@@ -431,7 +472,7 @@ function QuizQ6({ sel, setSel, goBack, goNext, onExit }) {
               <div style={{ padding: '14px 20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
                   <div style={{ fontFamily: TK.serif, fontSize: 20, fontWeight: 300, color: TK.ink, lineHeight: 1.1 }}>{o.label}</div>
-                  {on && <div style={{ width: 20, height: 20, borderRadius: '50%', background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: 12 }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
+                  {on && <div style={{ width: 20, height: 20, background: TK.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: 12 }}><span style={{ color: '#fff', fontSize: 11 }}>✓</span></div>}
                 </div>
                 <div style={{ fontFamily: TK.sans, fontSize: 13, color: TK.inkMid, lineHeight: 1.6 }}>{o.desc}</div>
               </div>
@@ -444,7 +485,7 @@ function QuizQ6({ sel, setSel, goBack, goNext, onExit }) {
 }
 
 // ─── Style Result ───────────────────────────────────────────────────────────
-function StyleResult({ go, goBack, onExit }) {
+function StyleResult({ go, goBack, goBrowse, onExit }) {
   const [copied, setCopied] = React.useState(false);
   const handleShare = () => {
     navigator.clipboard.writeText('My House2Home style is Modern Warm — https://bwolfgang13.github.io/house2home/').then(() => {
@@ -470,6 +511,9 @@ function StyleResult({ go, goBack, onExit }) {
               {['natural · organic', 'warm tones', 'clean lines', 'considered pieces'].map(t => <div key={t} style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkMid, padding: '5px 12px', border: `0.5px solid ${TK.border}` }}>{t}</div>)}
             </div>
             <Btn label="Pick my starter pack →" size="lg" onClick={go} />
+            <div style={{ marginTop: 10 }}>
+              <span onClick={goBrowse} style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight, cursor: 'pointer', textDecoration: 'underline' }}>Browse all packs instead</span>
+            </div>
             <div style={{ marginTop: 14, display: 'flex', alignItems: 'center', gap: 16 }}>
               <span onClick={goBack} style={{ fontFamily: TK.sans, fontSize: 12, color: TK.inkLight, cursor: 'pointer', textDecoration: 'underline' }}>Retake quiz</span>
               <span style={{ fontFamily: TK.sans, fontSize: 12, color: TK.border }}>·</span>
@@ -530,8 +574,8 @@ function PackRound({ round, leftKey, rightKey, onChoose, goBack, goBrowse, onExi
             {round === 1 ? 'Two packs, curated for your Modern Warm style' : `Pack ${leftKey} carries forward — here's your next option`}
           </p>
           {round === 1 && (
-            <div style={{ marginBottom: 20, textAlign: 'center' }}>
-              <span onClick={goBrowse} style={{ fontFamily: TK.sans, fontSize: 11, color: TK.inkLight, cursor: 'pointer', letterSpacing: '0.07em', textTransform: 'uppercase', borderBottom: `0.5px solid ${TK.border}`, paddingBottom: 1 }}>Browse all packs instead →</span>
+            <div style={{ marginBottom: 18, display: 'flex', justifyContent: 'center' }}>
+              <Btn label="Browse all packs instead →" variant="outline" size="sm" onClick={goBrowse} />
             </div>
           )}
           <div style={{ display: 'flex', width: '100%', flex: 1, position: 'relative', minHeight: 0 }}>
@@ -1190,7 +1234,7 @@ function App() {
     });
   }
 
-  // Screens: 0=Landing, 1=Q1, 2=Q2, 3=Q3, 4=Q4, 5=Q5, 6=Q6,
+  // Screens: 0=Landing, 18=KnowYourStyle, 1=Q1, 2=Q2, 3=Q3, 4=Q4, 5=Q5, 6=Q6,
   //          7=StyleResult, 8=PackR1, 9=PackR2, 10=PackR3,
   //          11=PackReveal, 12=AR, 13=Cart, 14=Checkout, 15=OrderConfirm,
   //          16=About(placeholder), 17=BrowseAllPacks
@@ -1198,8 +1242,9 @@ function App() {
   const onExit = () => go(0);
 
   function renderScreen() {
-    if (screen === 0) return <Landing go={() => go(1)} goQuiz={() => go(1)} goHowItWorks={() => setShowHelp(true)} goAbout={() => go(16)} />;
+    if (screen === 0) return <Landing go={() => go(18)} goQuiz={() => go(18)} goHowItWorks={() => setShowHelp(true)} goAbout={() => go(16)} />;
     if (screen === 16) return <PlaceholderPage title="About" goBack={() => go(0)} />;
+    if (screen === 18) return <KnowYourStyle goYes={() => go(17)} goNo={() => go(1)} onExit={onExit} />;
 
     if (screen === 1) return <QuizQ1 sel={q1} toggle={toggle(setQ1)} goBack={back} goNext={() => go(2)} onExit={onExit} />;
     if (screen === 2) return <QuizQ2 sel={q2} setSel={setQ2} goBack={back} goNext={() => go(3)} onExit={onExit} />;
@@ -1208,7 +1253,7 @@ function App() {
     if (screen === 5) return <QuizQ5 sel={q5} toggle={toggle(setQ5)} goBack={back} goNext={() => go(6)} onExit={onExit} />;
     if (screen === 6) return <QuizQ6 sel={q6} setSel={setQ6} goBack={back} goNext={() => go(7)} onExit={onExit} />;
 
-    if (screen === 7) return <StyleResult go={() => go(8)} goBack={() => go(1)} onExit={onExit} />;
+    if (screen === 7) return <StyleResult go={() => go(8)} goBack={() => go(1)} goBrowse={() => go(17)} onExit={onExit} />;
 
     if (screen === 8) return (
       <PackRound round={1} leftKey="A" rightKey="B"
